@@ -1,0 +1,893 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Studio Écoute active</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Caveat:wght@600;700&display=swap">
+<style>
+
+/* Mise en page : une « copie d'examen » numérique — barre d'onglets, colonne de lecture, questions sur papier réglé ; surligneur pour les verbes d'action, stylo rouge pour le corrigé. */
+:root{
+  --paper:#f2f4f8; --card:#ffffff; --ink:#18264a; --ink-2:#4b5878; --ink-3:#7d88a3;
+  --rule:#d5dceb; --rule-strong:#b7c2d9; --blue:#2846c4; --blue-soft:#e4e9fb;
+  --red:#c7372c; --red-soft:#fbe9e7; --hl:#f6df4c; --hl-ink:#1f1a05;
+  --ok:#1f7a4d; --ok-soft:#e1f3e9; --warn:#a85f00; --warn-soft:#fdf0dc;
+  --shadow:0 1px 2px rgba(24,38,74,.06),0 4px 14px rgba(24,38,74,.06);
+  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --f-hand:"Caveat","Bradley Hand","Segoe Print",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0f1422; --card:#171e30; --ink:#e7ebf6; --ink-2:#aab4cc; --ink-3:#7a85a0;
+  --rule:#273149; --rule-strong:#36425f; --blue:#8ea4ff; --blue-soft:#202c52;
+  --red:#ff7a6e; --red-soft:#3a1d1c; --hl:#e8cf3a; --hl-ink:#1f1a05;
+  --ok:#5fd39a; --ok-soft:#17342a; --warn:#f0b35a; --warn-soft:#3a2a12;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0f1422; --card:#171e30; --ink:#e7ebf6; --ink-2:#aab4cc; --ink-3:#7a85a0;
+  --rule:#273149; --rule-strong:#36425f; --blue:#8ea4ff; --blue-soft:#202c52;
+  --red:#ff7a6e; --red-soft:#3a1d1c; --hl:#e8cf3a; --hl-ink:#1f1a05;
+  --ok:#5fd39a; --ok-soft:#17342a; --warn:#f0b35a; --warn-soft:#3a2a12;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25); color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+p{margin:0}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px}
+
+/* En-tête */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.top .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto}
+.brand b{font-family:var(--f-display);font-weight:800;font-size:1.35rem;letter-spacing:-.01em}
+.brand b span{background:var(--hl);color:var(--hl-ink);padding:0 .18em;border-radius:3px}
+.brand small{color:var(--ink-3);font-size:.8rem;letter-spacing:.04em;text-transform:uppercase}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;max-width:100%;scrollbar-width:none}
+nav.tabs a{white-space:nowrap;text-decoration:none;color:var(--ink-2);font-weight:700;font-size:.92rem;padding:7px 12px;border-radius:999px}
+nav.tabs a:hover{background:var(--blue-soft);color:var(--ink)}
+nav.tabs a[aria-current="page"]{background:var(--ink);color:var(--paper)}
+
+main{padding-block:28px 64px}
+section[data-view]{display:grid;gap:28px}
+section[data-view] > *{min-width:0}
+.lede{color:var(--ink-2);max-width:68ch}
+.eyebrow{font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.02em}
+.h2{font-size:1.4rem;font-weight:700}
+.hl{background:linear-gradient(transparent 12%,var(--hl) 12%,var(--hl) 88%,transparent 88%);color:var(--hl-ink);padding:0 .2em;border-radius:2px;font-weight:700;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.hand{font-family:var(--f-hand);color:var(--red);font-weight:700}
+.muted{color:var(--ink-3)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* Boutons */
+.btn{border:1px solid var(--rule-strong);background:var(--card);color:var(--ink);text-decoration:none;border-radius:10px;padding:8px 14px;font-weight:700;font-size:.92rem;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--ink-2)}
+.btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn.red{color:var(--red);border-color:color-mix(in srgb,var(--red) 45%,transparent)}
+.btn.ghost{background:transparent}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.sm{padding:5px 10px;font-size:.84rem;border-radius:8px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* Accueil */
+.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:center}
+.exam-card{background:var(--card);border:1px solid var(--rule);border-radius:16px;box-shadow:var(--shadow);padding:20px;display:grid;gap:14px}
+.timeline{display:grid;grid-template-columns:15fr 150fr 15fr;border-radius:8px;overflow:hidden;border:1px solid var(--rule-strong);font-size:.8rem;font-weight:700}
+.timeline div{padding:8px 6px;text-align:center}
+.timeline div:nth-child(1),.timeline div:nth-child(3){background:var(--hl);color:var(--hl-ink)}
+.timeline div:nth-child(2){background:var(--blue-soft)}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.fact{border-top:2px solid var(--ink);padding-top:6px}
+.fact b{font-family:var(--f-display);font-size:1.5rem;display:block}
+.fact span{font-size:.82rem;color:var(--ink-2)}
+.modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.module{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:16px;text-decoration:none;color:inherit;display:grid;gap:6px;align-content:start}
+.module:hover{border-color:var(--ink-2)}
+.module h3{font-size:1.1rem}
+.module p{color:var(--ink-2);font-size:.92rem}
+.verbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.verb{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px 14px;display:grid;gap:4px}
+.verb p{font-size:.92rem;color:var(--ink-2)}
+.crit{columns:2 260px;column-gap:28px;padding-left:1.1em;margin:0}
+.crit li{margin-bottom:6px;break-inside:avoid}
+
+/* Sujets */
+.grid-sujets{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.sujet{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:16px;display:grid;gap:8px;text-align:left;align-content:start}
+.sujet:hover{border-color:var(--ink-2);box-shadow:var(--shadow)}
+.sujet h3{font-size:1.2rem}
+.sujet p{font-size:.9rem;color:var(--ink-2)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:.72rem;font-weight:700;letter-spacing:.03em;padding:2px 8px;border-radius:999px;background:var(--blue-soft);color:var(--ink)}
+.tag.a{background:var(--warn-soft);color:var(--warn)}
+.tag.lock{background:var(--red-soft);color:var(--red)}
+.tag.open{background:var(--ok-soft);color:var(--ok)}
+.lockbox{border:1.5px dashed color-mix(in srgb,var(--red) 55%,transparent);border-radius:12px;padding:10px 14px;font-size:.92rem;color:var(--ink-2)}
+.bar{height:6px;border-radius:99px;background:var(--rule);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);width:0}
+
+/* Vue d'un sujet */
+.case-head{display:grid;gap:12px}
+.case-layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px;align-items:start}
+.outline{position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px);display:grid;gap:4px;font-size:.88rem;max-height:calc(100vh - 100px);overflow:auto}
+.outline a{text-decoration:none;color:var(--ink-2);padding:4px 8px;border-radius:6px;display:flex;gap:8px;align-items:center}
+.outline a:hover{background:var(--blue-soft);color:var(--ink)}
+.outline .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--ink-3);flex:none}
+.outline .dot.done{background:var(--ok);border-color:var(--ok)}
+.outline .mt{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:700;margin-top:10px;padding-left:8px}
+.ctx{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:16px;display:grid;gap:10px}
+.ctx dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 14px;margin:0;font-size:.92rem}
+.ctx dt{color:var(--ink-3)}
+.ctx dd{margin:0}
+details.data{border-top:1px dashed var(--rule-strong);padding-top:8px}
+details.data summary{cursor:pointer;font-weight:700;color:var(--blue)}
+details.data ul{margin:8px 0 0;padding-left:1.1em;display:grid;gap:4px;font-size:.92rem}
+.mode-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:10px 14px}
+.seg{display:inline-flex;border:1px solid var(--rule-strong);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:7px 12px;font-weight:700;font-size:.88rem;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.clock{font-family:var(--f-mono);font-size:1.25rem;font-weight:600;font-variant-numeric:tabular-nums}
+.clock.low{color:var(--red)}
+.mission-title{font-size:1.15rem;font-weight:700;padding-top:6px;border-top:2px solid var(--ink)}
+.q{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:16px;display:grid;gap:12px;scroll-margin-top:90px}
+.q-head{display:flex;gap:12px;align-items:flex-start}
+.q-num{font-family:var(--f-display);font-weight:800;font-size:1.15rem;min-width:2.6em}
+.q-txt{flex:1;min-width:0}
+.q-meta{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--ink-3)}
+.q-meta span{display:inline-flex;gap:4px;align-items:center}
+textarea.copy{width:100%;min-height:150px;resize:vertical;border:1px solid var(--rule-strong);border-radius:10px;padding:6px 12px;line-height:28px;
+  background:var(--card) repeating-linear-gradient(to bottom,transparent 0,transparent 27px,var(--rule) 27px,var(--rule) 28px);background-attachment:local;background-position:0 6px;color:var(--ink)}
+.tip{background:var(--blue-soft);border-radius:10px;padding:10px 12px;font-size:.92rem}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.field{display:grid;gap:4px;font-size:.88rem}
+.field label{color:var(--ink-2)}
+.field input{font-size:16px;border:1px solid var(--rule-strong);border-radius:8px;padding:7px 10px;background:var(--card);font-family:var(--f-mono);font-variant-numeric:tabular-nums;width:100%}
+.field input.ok{border-color:var(--ok);background:var(--ok-soft)}
+.field input.ko{border-color:var(--red);background:var(--red-soft)}
+.field .exp{font-size:.8rem;font-family:var(--f-mono);color:var(--red)}
+.picks{display:grid;gap:6px}
+.pick{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--rule);border-radius:10px;padding:8px 10px;font-size:.93rem}
+.pick input{margin-top:4px;accent-color:var(--ink)}
+.pick.good{border-color:var(--ok);background:var(--ok-soft)}
+.pick.bad{border-color:var(--red);background:var(--red-soft)}
+.pick.opt{border-style:dashed}
+.pick small{display:block;color:var(--ink-2);font-size:.82rem}
+.corr{border:1.5px solid color-mix(in srgb,var(--red) 55%,transparent);border-radius:12px;padding:12px 14px;display:grid;gap:8px;background:color-mix(in srgb,var(--red-soft) 55%,var(--card))}
+.corr h4{font-family:var(--f-hand);color:var(--red);font-size:1.6rem;font-weight:700;line-height:1}
+.corr ul{margin:0;padding-left:0;list-style:none;display:grid;gap:6px}
+.corr li label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.corr li input{margin-top:5px;accent-color:var(--red)}
+.corr .note{font-size:.82rem;color:var(--ink-2)}
+.score-chip{font-weight:700;font-size:.82rem;padding:2px 9px;border-radius:999px;background:var(--rule);color:var(--ink)}
+.score-chip.ok{background:var(--ok-soft);color:var(--ok)}
+.score-chip.mid{background:var(--warn-soft);color:var(--warn)}
+.score-chip.ko{background:var(--red-soft);color:var(--red)}
+.bilan{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:18px;display:grid;gap:10px}
+
+/* Calculs */
+.calc-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:16px;display:grid;gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--rule-strong);background:var(--card);border-radius:999px;padding:4px 11px;font-size:.84rem;font-weight:700;color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.exo{display:grid;gap:12px}
+.exo .ctxline{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.exo .enonce{font-size:1.08rem}
+.answer-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.answer-row input{font-family:var(--f-mono);font-size:1.1rem;border:1.5px solid var(--rule-strong);border-radius:10px;padding:8px 12px;width:200px;max-width:100%;background:var(--card)}
+.steps{font-family:var(--f-mono);font-size:.9rem;display:grid;gap:4px;background:var(--paper);border-radius:10px;padding:10px 12px;overflow-x:auto}
+.feedback{font-weight:700}
+.feedback.ok{color:var(--ok)} .feedback.ko{color:var(--red)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.stats b{font-family:var(--f-display);font-size:1.6rem;display:block}
+.stats span{font-size:.75rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+table.formules{width:100%;border-collapse:collapse;font-size:.86rem}
+table.formules td{border-top:1px solid var(--rule);padding:6px 4px;vertical-align:top}
+table.formules td:first-child{font-weight:700;width:42%}
+table.formules td:last-child{font-family:var(--f-mono);font-size:.8rem}
+
+/* Ateliers */
+.ateliers-nav{display:flex;flex-wrap:wrap;gap:6px}
+.order-list{display:grid;gap:6px;list-style:none;padding:0;margin:0;counter-reset:st}
+.order-list li{display:flex;align-items:center;gap:8px;border:1px solid var(--rule-strong);background:var(--card);border-radius:10px;padding:8px 10px}
+.order-list li::before{counter-increment:st;content:counter(st);font-family:var(--f-display);font-weight:800;min-width:1.4em}
+.order-list li span{flex:1;min-width:0}
+.order-list li.good{border-color:var(--ok);background:var(--ok-soft)}
+.order-list li.bad{border-color:var(--red);background:var(--red-soft)}
+.order-list li small{display:block;color:var(--ink-2);font-style:italic}
+.mv{border:1px solid var(--rule-strong);background:var(--paper);border-radius:6px;width:30px;height:30px;font-weight:700;line-height:1}
+.quiz-card{display:grid;gap:12px}
+.quote{font-size:1.1rem;border-left:3px solid var(--ink);padding:4px 0 4px 14px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button{border:1px solid var(--rule-strong);background:var(--card);border-radius:10px;padding:8px 12px;font-weight:700;text-align:left}
+.opts button.good{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opts button.bad{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.explain{background:var(--paper);border-radius:10px;padding:10px 12px;font-size:.95rem}
+.swot-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;font-size:.78rem;text-align:center;font-weight:700}
+.swot-grid div{padding:6px;border-radius:6px;background:var(--paper)}
+.sms-phone{max-width:360px;border:1px solid var(--rule-strong);border-radius:22px;padding:14px;background:var(--paper);display:grid;gap:8px}
+.bubble{background:var(--card);border:1px solid var(--rule);border-radius:16px 16px 16px 4px;padding:10px 12px;white-space:pre-wrap;overflow-wrap:anywhere;min-height:44px}
+.checks{list-style:none;padding:0;margin:0;display:grid;gap:4px;font-size:.92rem}
+.checks li::before{content:"○ ";color:var(--ink-3)}
+.checks li.on::before{content:"● ";color:var(--ok)}
+.checks li.on{color:var(--ok)}
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.fc-field{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--rule);border-radius:10px;padding:8px 10px;font-size:.92rem;background:var(--card)}
+.fc-field.good{border-color:var(--ok);background:var(--ok-soft)}
+.fc-field.bad{border-color:var(--red);background:var(--red-soft)}
+.fc-field.miss{border-color:var(--warn);background:var(--warn-soft)}
+
+/* Notions */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.flash{perspective:900px;min-height:170px;border:0;background:transparent;padding:0;text-align:left}
+.flash .in{position:relative;width:100%;height:100%;min-height:170px;transition:transform .45s;transform-style:preserve-3d}
+.flash.flip .in{transform:rotateY(180deg)}
+.flash .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;border:1px solid var(--rule);padding:14px;display:grid;align-content:space-between;gap:8px;background:var(--card);overflow:auto}
+.flash .back{transform:rotateY(180deg);background:var(--ink);color:var(--paper);border-color:var(--ink);font-size:.94rem}
+.flash .face h3{font-size:1.15rem}
+.flash .known{font-size:.75rem;font-weight:700;color:var(--ok)}
+@media (prefers-reduced-motion: reduce){.flash .in{transition:none}}
+
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:10px;font-weight:700;font-size:.92rem;z-index:50;box-shadow:var(--shadow)}
+
+@media (max-width:860px){
+  .hero,.case-layout,.calc-layout{grid-template-columns:minmax(0,1fr)}
+  .outline{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px}
+  .outline .mt{width:100%}
+}
+@media (max-width:520px){
+  .facts{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .q-head{flex-direction:column;gap:4px}
+  .brand small{display:none}
+}
+
+/* Téléphone : en-tête compact, onglets visibles en entier, pas de zoom iOS sur les champs */
+@media (max-width:640px){
+  .top .wrap{gap:4px 10px;padding-block:6px}
+  .brand b{font-size:1.15rem}
+  nav.tabs{width:100%;justify-content:space-between;gap:2px}
+  nav.tabs a{padding:6px 9px;font-size:.84rem}
+  textarea.copy,.answer-row input,#sms-in{font-size:16px}
+  #calc-types,#at-nav,#fc-filter{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;min-width:0;max-width:100%}
+  #calc-types .chip,#at-nav .chip,#fc-filter .chip{flex:none}
+}
+/* Paysage sur téléphone : l'en-tête ne reste plus collé en haut, et tient sur une ligne */
+@media (max-height:500px){
+  .top{position:static}
+  .top .wrap{flex-wrap:nowrap;padding-block:6px}
+  .brand small{display:none}
+  nav.tabs{width:auto}
+}
+
+/* ——— Studio Écoute active : la même copie que Coach E2 et Coach 1re B, encre prune ——— */
+:root{--blue:#6b3fa0;--blue-soft:#efe6fa;--client:#e9eef8;--seller:#efe6fa}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--blue:#c4a3f5;--blue-soft:#2b2140;--client:#1d2638;--seller:#2b2140}}
+:root[data-theme="dark"]{--blue:#c4a3f5;--blue-soft:#2b2140;--client:#1d2638;--seller:#2b2140}
+.brand b span{background:var(--blue);color:var(--paper)}
+body.dys{--f-body:"Lexend","Atkinson Hyperlegible",system-ui,sans-serif;font-size:18px;line-height:1.75;letter-spacing:.02em;word-spacing:.1em}
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.scard{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:16px;display:grid;gap:8px;align-content:start}
+.scard h3{font-size:1.1rem}
+.scard p{font-size:.9rem;color:var(--ink-2)}
+.scard .meta{font-size:.8rem;color:var(--ink-3);font-family:var(--f-mono)}
+.player{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.modes{display:flex;flex-wrap:wrap;gap:6px}
+.transcript{display:grid;gap:8px;background:var(--card);border:1px solid var(--rule);border-radius:16px;padding:14px;min-height:200px}
+.line{display:grid;gap:4px;max-width:88%;padding:10px 12px;border-radius:14px;cursor:pointer;border:2px solid transparent;font-family:var(--f-body)}
+.line.c{background:var(--client);justify-self:start;border-bottom-left-radius:4px}
+.line.v{background:var(--seller);justify-self:end;border-bottom-right-radius:4px}
+.line.now{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.line .who{font-size:.75rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.line .masked{color:var(--ink-3);font-style:italic}
+.tech{font-size:.72rem;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--blue);color:var(--paper);text-transform:none;letter-spacing:0}
+mark.info{background:linear-gradient(transparent 10%,var(--hl) 10%,var(--hl) 90%,transparent 90%);color:var(--hl-ink);padding:0 .15em;border-radius:2px}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ask{background:var(--card);border:2px solid var(--blue);border-radius:14px;padding:14px;display:grid;gap:10px}
+.ask .opts{display:flex;flex-wrap:wrap;gap:8px}
+.ask textarea{width:100%;min-height:90px;border:1px solid var(--rule-strong);border-radius:10px;padding:8px 10px;background:var(--paper);color:var(--ink);font-size:16px}
+.side{display:grid;gap:14px}
+.side .panel label{font-size:.88rem;color:var(--ink-2);display:grid;gap:4px}
+.side select,.side input[type=range]{width:100%}
+.side select{border:1px solid var(--rule-strong);border-radius:8px;padding:6px;background:var(--card);color:var(--ink);font-size:.9rem}
+.notes{width:100%;min-height:220px}
+.found li.on{color:var(--ok)} .found li.off{color:var(--red)}
+.found{list-style:none;padding:0;margin:0;display:grid;gap:4px}
+.found li::before{content:"○ "} .found li.on::before{content:"✓ "} .found li.off::before{content:"✕ "}
+.qrow{display:grid;gap:4px}
+.qrow input{border:1px solid var(--rule-strong);border-radius:8px;padding:8px 10px;background:var(--card);color:var(--ink);font-size:16px}
+.qrow input.ok{border-color:var(--ok);background:var(--ok-soft)} .qrow input.ko{border-color:var(--red);background:var(--red-soft)}
+.editor{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+.editor textarea{width:100%;min-height:420px;font-family:var(--f-mono);font-size:.88rem;line-height:1.6;border:1px solid var(--rule-strong);border-radius:12px;padding:12px;background:var(--card);color:var(--ink)}
+.syntax code{font-family:var(--f-mono);font-size:.82rem;background:var(--paper);padding:1px 5px;border-radius:4px}
+.syntax pre{font-family:var(--f-mono);font-size:.78rem;background:var(--paper);padding:10px;border-radius:10px;white-space:pre-wrap;margin:0}
+.warn{color:var(--warn);font-size:.88rem}
+.techs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.techs div{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px 14px;display:grid;gap:4px;font-size:.92rem}
+.techs b{font-family:var(--f-display);font-size:1.02rem}
+.techs i{color:var(--ink-2)}
+.recap{display:grid;gap:8px}
+.recap .r{border-top:1px solid var(--rule);padding-top:8px;display:grid;gap:3px;font-size:.93rem}
+@media (max-width:860px){ .player,.editor{grid-template-columns:minmax(0,1fr)} .line{max-width:96%} }
+@media (max-width:640px){ #dys-btn,#read-btn{order:1;padding:4px 9px;font-size:.8rem} nav.tabs{order:2} }
+.a11y-bar{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:35;display:flex;gap:6px}
+.a11y-bar[hidden]{display:none!important}
+.a11y-bar button{font:inherit;font-weight:700;font-size:.9rem;border:0;border-radius:999px;padding:10px 16px;background:var(--ink,#18264a);color:var(--paper,#fff);box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer}
+.a11y-ico{display:inline-grid;place-items:center;width:1.7em;height:1.7em;margin-right:6px;border-radius:50%;background:var(--blue-soft,#e4e9fb);font-size:.85em;cursor:pointer;flex:none;vertical-align:middle}
+.a11y-relire{justify-self:start;align-self:start;font:inherit;font-size:.82rem;font-weight:700;border:1px solid var(--rule-strong,#b7c2d9);background:var(--card,#fff);color:var(--ink,#18264a);border-radius:999px;padding:4px 12px;margin:4px 0;cursor:pointer;width:auto}
+.a11y-relire[data-on]{background:var(--ink,#18264a);color:var(--paper,#fff)}
+.a11y-reading{outline:3px solid var(--hl,#f6df4c)!important;outline-offset:2px;border-radius:6px;background-color:color-mix(in srgb,var(--hl,#f6df4c) 22%,transparent)}
+@media print{.a11y-bar,.a11y-relire,.a11y-ico{display:none!important}}
+
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>Studio <span>Écoute</span></b><small>2de et 1re Bac Pro · Métiers du commerce et de la vente</small></div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#biblio" data-tab="biblio">Scripts</a>
+      <a href="#lecteur" data-tab="lecteur">S’entraîner</a>
+      <a href="#creer" data-tab="creer">Créer / importer</a>
+      <a href="#methode" data-tab="methode">Méthode</a>
+    </nav>
+    <button class="btn sm" id="dys-btn" aria-pressed="false">Aa Confort de lecture</button><button class="btn sm" id="read-btn" aria-pressed="false" title="Touche un texte pour l’entendre">🔈 Lecture</button>
+  </div>
+</header>
+
+<main class="wrap">
+<section data-view="biblio">
+  <div style="display:grid;gap:8px"><p class="eyebrow">Écoute active</p><h1 class="h1">Écoute, note, <span class="hl">reformule</span>.</h1>
+  <p class="lede">Choisis un script d’appel ou d’entretien. Tu peux l’écouter, prendre des notes comme un vrai vendeur, repérer les techniques d’écoute, puis répondre toi-même à la place du vendeur.</p></div>
+  <div class="row"><div class="chips" id="lib-filter"></div><a class="btn sm" href="#creer">📥 Coller un script reçu</a></div>
+  <div class="lib-grid" id="lib"></div>
+</section>
+
+<section data-view="lecteur" hidden><div id="player-root" style="display:grid;gap:16px"></div></section>
+
+<section data-view="creer" hidden>
+  <div style="display:grid;gap:8px"><p class="eyebrow">Pour le professeur… et pour toi</p><h1 class="h1">Créer ou importer un script</h1>
+  <p class="lede">Colle un script reçu de ton professeur, ou écris le tien. L’aperçu à droite te dit tout de suite ce que l’appli a compris.</p></div>
+  <div class="editor">
+    <div style="display:grid;gap:10px;min-width:0">
+      <textarea id="ed" data-a11y-no spellcheck="true" aria-label="Texte du script"></textarea>
+      <div class="row"><button class="btn primary" id="ed-play">▶ S’entraîner sur ce script</button><button class="btn" id="ed-save">Enregistrer dans mes scripts</button><button class="btn" id="ed-copy">Copier le texte</button><button class="btn ghost" id="ed-model">Insérer un modèle</button><button class="btn ghost" id="ed-clear">Vider</button></div>
+      <div class="panel" id="ed-preview"></div>
+    </div>
+    <div class="panel syntax">
+      <h3 class="h2" style="font-size:1.05rem">Comment écrire un script</h3>
+      <p>Une réplique par ligne, qui commence par le nom de la personne puis « : ».</p>
+      <pre>Titre : Appel d’un prospect
+Niveau : 1re B
+Contexte : Une phrase pour situer la scène.
+Client : Bonjour, je cherche…
+Vendeur [Reformulation] : Si je comprends bien…
+? Quel est le budget ? = 250 | deux cent cinquante</pre>
+      <p><b>Les rôles</b> : « Vendeur », « Conseiller », « Commercial », « Négociateur », « Agent », « Chargé » ou « Élève » = le rôle de l’élève. Tous les autres noms (Client, Mme Kaci, Secrétaire…) = l’interlocuteur.</p>
+      <p><b>[Technique]</b> après le nom : la technique d’écoute de la réplique, pour l’exercice « Repérer la technique ». Exemples : <code>[Question ouverte]</code> <code>[Reformulation]</code> <code>[Empathie]</code>.</p>
+      <p><b>{étiquette:texte}</b> dans une réplique : une information que l’élève doit noter. Exemple : <code>{budget:cent vingt euros}</code>. L’appli lit seulement « cent vingt euros ».</p>
+      <p><b>? question = réponse</b> : une question de compréhension. Plusieurs réponses acceptées, séparées par <code>|</code>. Les majuscules et les accents ne comptent pas.</p>
+      <p class="muted">Écris les nombres en lettres dans les répliques (« seize heures trente ») : la voix les lit mieux.</p>
+    </div>
+  </div>
+</section>
+
+<section data-view="methode" hidden>
+  <div style="display:grid;gap:8px"><p class="eyebrow">Méthode</p><h1 class="h1">Les techniques d’écoute active</h1>
+  <p class="lede">Écouter activement, c’est montrer au client qu’on l’a compris, et l’aider à dire ce dont il a vraiment besoin. Le vendeur parle peu, questionne, reformule et note.</p></div>
+  <div class="techs" id="techs"></div>
+  <div class="panel" style="display:grid;gap:6px"><h3 class="h2" style="font-size:1.05rem">Bien prendre des notes pendant un appel</h3>
+  <ul style="margin:0;padding-left:1.1em;display:grid;gap:4px"><li>Note des mots-clés, pas des phrases : « 3 pièces · gare · budget 250 k€ ».</li><li>Note les chiffres tels qu’ils sont dits : dates, heures, prix, quantités.</li><li>Fais répéter ou épeler un nom : « Pouvez-vous me l’épeler ? »</li><li>Termine toujours par une synthèse pour vérifier tes notes avec le client.</li></ul></div>
+</section>
+</main>
+<div class="toast" id="toast" hidden></div>
+<script>
+/* Scripts d'exemple — même syntaxe que celle proposée au professeur */
+const LIBRARY = [
+`Titre : Des chaussures pour courir
+Niveau : 2de
+Contexte : Accueil d’un client dans un magasin de sport. Le vendeur découvre le besoin avant de proposer un produit.
+Client : Bonjour, je cherche des chaussures de course.
+Vendeur [Question ouverte] : Bonjour Monsieur, avec plaisir. Pour quelle pratique les cherchez-vous ?
+Client : Je cours {fréquence:trois fois par semaine}, surtout {terrain:sur les chemins du parc}.
+Vendeur [Relance] : D’accord… Et sur quelles distances, à peu près ?
+Client : Entre cinq et dix kilomètres. Mais en ce moment j’ai {problème:mal aux genoux} après les sorties.
+Vendeur [Empathie] : Je comprends, c’est désagréable et ça peut vite décourager.
+Vendeur [Question fermée] : Vos chaussures actuelles ont-elles plus d’un an ?
+Client : Oui, au moins deux ans. Et je ne veux pas dépasser {budget:cent vingt euros}.
+Vendeur [Reformulation] : Si je résume, vous courez trois fois par semaine sur chemin, vous avez mal aux genoux, et votre budget est de cent vingt euros maximum. C’est bien ça ?
+Client : Exactement.
+Vendeur [Question alternative] : Préférez-vous essayer d’abord un modèle très amorti ou un modèle plus léger ?
+Client : Un modèle amorti, pour mes genoux.
+? Combien de fois par semaine le client court-il ? = trois | 3
+? Quel problème physique le client signale-t-il ? = genoux
+? Quel est le budget maximum du client ? = 120 | cent vingt`,
+
+`Titre : Un client mécontent au comptoir
+Niveau : 2de
+Contexte : Un client revient avec un téléphone acheté il y a peu. Le vendeur doit écouter avant de proposer une solution.
+Client : Bonjour. Je suis très énervé : le téléphone que j’ai acheté ici {date:il y a dix jours} s’éteint tout seul !
+Vendeur [Empathie] : Bonjour Madame. Je comprends votre agacement, c’est vraiment pénible de ne pas pouvoir compter sur son téléphone.
+Vendeur [Question ouverte] : Pouvez-vous me raconter ce qui se passe exactement ?
+Client : Il s’éteint {problème:dès que la batterie descend sous cinquante pour cent}. J’ai raté un appel pour un entretien d’embauche !
+Vendeur [Silence / acquiescement] : Hum hum… je vous écoute.
+Client : Et en plus, je l’ai payé {prix:deux cent quarante-neuf euros}, ce n’est pas rien.
+Vendeur [Reformulation] : Si je comprends bien, votre téléphone acheté il y a dix jours s’éteint dès que la batterie passe sous la moitié, et cela vous a fait rater un appel important.
+Client : Oui, c’est ça.
+Vendeur [Question fermée] : Avez-vous gardé votre ticket de caisse ?
+Client : Oui, {preuve:je l’ai dans mon sac}.
+Vendeur [Synthèse] : Très bien. Comme l’achat a moins de quinze jours et que vous avez le ticket, je vous propose un échange immédiat contre un appareil neuf.
+? Depuis combien de temps la cliente a-t-elle acheté son téléphone ? = dix jours | 10 jours
+? À quel moment le téléphone s’éteint-il ? = cinquante | 50 | moitié
+? Quelle solution le vendeur propose-t-il ? = échange`,
+
+`Titre : Prendre un rendez-vous au téléphone
+Niveau : 2de
+Contexte : Une cliente appelle une boutique d’optique pour un rendez-vous. Le vendeur doit noter toutes les informations sans en oublier.
+Client : Bonjour, je voudrais prendre rendez-vous pour {motif:un contrôle de la vue et de nouvelles lunettes}.
+Vendeur [Question fermée] : Bonjour Madame, bien sûr. Avez-vous une ordonnance récente ?
+Client : Oui, elle date {ordonnance:de mars}.
+Vendeur [Question ouverte] : Quels jours vous arrangent le mieux ?
+Client : Plutôt {disponibilité:le mercredi après-midi}, je travaille le reste de la semaine.
+Vendeur [Question alternative] : Je peux vous proposer mercredi à quatorze heures ou à seize heures trente. Qu’est-ce qui vous convient ?
+Client : Seize heures trente, c’est parfait.
+Vendeur [Question ouverte] : À quel nom dois-je noter le rendez-vous ?
+Client : {nom:Madame Kaci}, K, A, C, I. Mon numéro, c’est le {téléphone:zéro six, douze, trente-quatre, cinquante-six, soixante-dix-huit}.
+Vendeur [Synthèse] : Je récapitule : Madame Kaci, mercredi à seize heures trente pour un contrôle de la vue et des lunettes, avec votre ordonnance de mars. Je vous envoie un SMS de confirmation.
+? À quelle heure est le rendez-vous ? = 16 h 30 | 16h30 | seize heures trente
+? Quel document la cliente doit-elle apporter ? = ordonnance`,
+
+`Titre : Conseil en boutique d’électroménager
+Niveau : 1re A
+Contexte : Un couple cherche un lave-linge. La vendeuse découvre les besoins pour conseiller le bon produit.
+Client : Bonjour, notre lave-linge vient de tomber en panne, il nous en faut un rapidement.
+Vendeur [Empathie] : Bonjour Monsieur, je comprends, c’est toujours au mauvais moment !
+Vendeur [Question ouverte] : Parlez-moi de votre foyer : combien de personnes vivent avec vous ?
+Client : Nous sommes {foyer:cinq, avec trois enfants}. On fait une machine presque tous les jours.
+Vendeur [Relance] : Une machine par jour… et vous lavez beaucoup de linge de sport, de draps ?
+Client : Oui, les enfants font du foot. Et on a {place:soixante centimètres de largeur} dans la cuisine, pas plus.
+Vendeur [Question ouverte] : Qu’est-ce qui compte le plus pour vous dans votre futur lave-linge ?
+Client : Qu’il {critère:consomme peu d’électricité}, les factures augmentent.
+Vendeur [Reformulation] : Si je vous ai bien compris, il vous faut un lave-linge de soixante centimètres, avec une grande capacité pour une famille de cinq, et économe en énergie.
+Client : C’est tout à fait ça. Et on aimerait être livrés {délai:avant samedi}.
+Vendeur [Synthèse] : Je vous propose donc un modèle de dix kilos, classe énergétique A, avec livraison et installation jeudi.
+? Combien de personnes compte le foyer ? = cinq | 5
+? Quelle largeur maximale est disponible ? = soixante | 60
+? Quel critère compte le plus pour le couple ? = consomme | électricité | énergie`,
+
+`Titre : Découvrir un propriétaire vendeur
+Niveau : 1re B
+Contexte : Une négociatrice de l’agence Nord Habitat rappelle un propriétaire qui a demandé une estimation en ligne.
+Vendeur : Bonjour Monsieur Rossi, Inès Martin de l’agence Nord Habitat, à Aulnay. Vous avez demandé une estimation de votre bien sur notre site. Avez-vous quelques minutes ?
+Client : Oui, allez-y.
+Vendeur [Question ouverte] : Pouvez-vous me décrire votre logement ?
+Client : C’est {bien:une maison de quatre pièces}, avec {jardin:un petit jardin de deux cents mètres carrés}, à dix minutes de la gare.
+Vendeur [Question ouverte] : Qu’est-ce qui vous amène à envisager de vendre ?
+Client : On attend {projet:un troisième enfant}, la maison devient trop petite.
+Vendeur [Empathie] : Félicitations ! C’est un beau projet.
+Vendeur [Question fermée] : Avez-vous déjà trouvé votre futur logement ?
+Client : Pas encore. On aimerait vendre {délai:avant la rentrée de septembre}.
+Vendeur [Reformulation] : Si je comprends bien, vous vendez votre maison de quatre pièces avec jardin parce que votre famille s’agrandit, et vous souhaitez avoir vendu avant septembre.
+Client : C’est exactement ça.
+Vendeur [Question alternative] : Pour l’estimation, je peux passer chez vous mardi en fin de journée ou samedi matin. Que préférez-vous ?
+Client : {rdv:Samedi matin}, nous serons tous les deux.
+? Pourquoi le client veut-il vendre ? = enfant | famille
+? Avant quand souhaite-t-il avoir vendu ? = septembre | rentrée
+? Quel jour a lieu le rendez-vous d’estimation ? = samedi`,
+
+`Titre : Bilan d’assurance d’un artisan
+Niveau : 1re B
+Contexte : Un conseiller du Cabinet Horizon Assurances rencontre une artisane pour faire le point sur ses besoins (B2B).
+Vendeur [Question ouverte] : Madame Diop, pour commencer, pouvez-vous me présenter votre activité ?
+Client : Je suis {métier:boulangère} à Sevran, j’ai {salariés:quatre salariés} et une camionnette de livraison.
+Vendeur [Relance] : Une camionnette… elle sert tous les jours ?
+Client : Oui, on livre {clients:deux écoles et un restaurant} chaque matin.
+Vendeur [Question ouverte] : Qu’est-ce qui vous inquiète le plus pour votre entreprise ?
+Client : Honnêtement, une panne du four. {risque:Sans four, je ferme}, et je perds tout mon chiffre d’affaires.
+Vendeur [Empathie] : Je comprends, votre four, c’est le cœur de votre activité.
+Vendeur [Reformulation] : Si je résume, ce qui compte pour vous, c’est de pouvoir continuer à travailler même si votre four tombe en panne.
+Client : Oui. Et je paie déjà {budget:cent quatre-vingts euros par mois} chez mon assureur actuel, je ne veux pas payer plus.
+Vendeur [Synthèse] : Je vais donc vous proposer une garantie perte d’exploitation et une assistance dépannage du matériel, en comparant avec vos cent quatre-vingts euros actuels.
+? Combien de salariés a l’artisane ? = quatre | 4
+? Quel risque l’inquiète le plus ? = four
+? Combien paie-t-elle aujourd’hui par mois ? = 180 | cent quatre-vingts`,
+
+`Titre : Un responsable RH pressé
+Niveau : 1re B
+Contexte : Une chargée d’affaires de l’agence Proxi Intérim appelle une entreprise de logistique pour découvrir ses besoins en personnel.
+Vendeur : Bonjour Monsieur Petit, Kenza Haddad de Proxi Intérim à Roissy. Je vous appelle car nous accompagnons plusieurs entreprises logistiques de la zone. Avez-vous deux minutes ?
+Client : Deux minutes, pas plus. Je suis en pleine préparation des commandes de Noël.
+Vendeur [Question ouverte] : Justement, comment se passe cette période pour vos équipes ?
+Client : C’est la course. Il me manque {besoin:une dizaine de préparateurs de commandes} {période:de fin novembre à début janvier}.
+Vendeur [Reformulation] : Donc il vous manque environ dix préparateurs pour couvrir la période de fin novembre à début janvier.
+Client : Oui. Et il faut qu’ils aient {condition:le permis cariste}, sinon ils ne me servent à rien.
+Vendeur [Question fermée] : Les horaires sont-ils en journée ou en équipes de nuit ?
+Client : {horaires:En deux équipes, matin et après-midi}.
+Vendeur [Synthèse] : Très bien. Dix préparateurs avec permis cariste, en deux équipes, de fin novembre à début janvier. Je vous envoie des profils dès demain matin.
+? Combien de préparateurs manque-t-il ? = dix | 10
+? Quelle condition est obligatoire pour les candidats ? = cariste
+? Comment sont organisés les horaires ? = deux équipes | matin`
+];
+
+const TECHS = [
+ ["Question ouverte","Elle commence par comment, pourquoi, quel, qu’est-ce que… Le client répond librement et donne beaucoup d’informations.","« Pour quelle pratique les cherchez-vous ? »"],
+ ["Question fermée","On y répond par oui ou non, ou par une information précise. Elle sert à vérifier ou à préciser.","« Avez-vous gardé votre ticket de caisse ? »"],
+ ["Question alternative","Elle propose un choix entre deux possibilités. Elle aide le client à décider.","« Mardi en fin de journée ou samedi matin ? »"],
+ ["Relance","On reprend un mot du client pour l’inviter à en dire plus.","« Une camionnette… elle sert tous les jours ? »"],
+ ["Reformulation","On redit avec ses propres mots ce que le client a dit, pour vérifier qu’on a bien compris.","« Si je comprends bien, … C’est bien ça ? »"],
+ ["Empathie","On montre qu’on comprend ce que le client ressent, sans le juger.","« Je comprends votre agacement. »"],
+ ["Synthèse","On résume l’essentiel à la fin de l’échange et on annonce la suite.","« Je récapitule : … Je vous envoie … »"],
+ ["Silence / acquiescement","On laisse parler le client, avec de petits signes d’écoute.","« Hum hum… je vous écoute. »"]
+];
+
+</script>
+<script>
+/* ================= Utilitaires ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle = a => { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+const norm = s => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[’']/g, " ").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function toast(m){ const t = $("#toast"); t.textContent = m; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2200); }
+function hashStr(s){ let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36); }
+const KEY = "studioEcoute.v1";
+let S = {}; try { S = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { S = {}; }
+S.mine ??= []; S.res ??= {}; S.voice ??= {c:{v:"", rate:1, pitch:1}, v:{v:"", rate:1, pitch:1}}; S.speed ??= 1; S.dys ??= false; S.draft ??= "";
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+/* ================= Lecture d'un script ================= */
+const SELLER = /(vend|conseil|commercial|negocia|charge|eleve|agent|hote|technicien|moi\b)/;
+function canonTech(t){ const n = norm(t); const f = TECHS.find(x => { const k = norm(x[0]); return k === n || k.startsWith(n) || n.startsWith(k.split(" / ")[0]); }); return f ? f[0] : t.trim().replace(/^./, c => c.toUpperCase()); }
+function parse(txt){
+  const s = {titre:"Script sans titre", niveau:"", contexte:"", lines:[], qs:[], infos:[], errors:[], id:"s" + hashStr(txt.trim())};
+  String(txt).split(/\r?\n/).forEach((raw, n) => {
+    const l = raw.trim(); if (!l) return; let m;
+    if ((m = l.match(/^titre\s*:\s*(.+)$/i))) { s.titre = m[1].trim(); return; }
+    if ((m = l.match(/^niveau\s*:\s*(.+)$/i))) { s.niveau = m[1].trim(); return; }
+    if ((m = l.match(/^contexte\s*:\s*(.+)$/i))) { s.contexte = m[1].trim(); return; }
+    if (l.startsWith("?")) { const i = l.indexOf("="); const q = (i < 0 ? l.slice(1) : l.slice(1, i)).trim(); const ans = i < 0 ? [] : l.slice(i + 1).split("|").map(x => x.trim()).filter(Boolean);
+      if (q) s.qs.push({q, ans}); if (!ans.length) s.errors.push(`Ligne ${n+1} : la question n’a pas de réponse après « = ».`); return; }
+    if ((m = l.match(/^([^:\[\]{}?]{1,40}?)\s*(?:\[([^\]]+)\])?\s*:\s*(.+)$/))) {
+      const who = m[1].trim(), tech = m[2] ? canonTech(m[2]) : null, infos = [];
+      const text = m[3].replace(/\{([^:{}]+):([^{}]+)\}/g, (_, k, v) => { infos.push({k:k.trim(), v:v.trim()}); return v.trim(); });
+      const html = esc(m[3]).replace(/\{([^:{}]+):([^{}]+)\}/g, (_, k, v) => `<mark class="info" title="${k.trim()}">${v.trim()}</mark>`);
+      s.lines.push({who, side: SELLER.test(norm(who)) ? "v" : "c", tech, text, html, infos}); s.infos.push(...infos); return; }
+    s.errors.push(`Ligne ${n+1} ignorée : « ${l.slice(0, 45)}${l.length > 45 ? "…" : ""} » (il manque « Nom : » au début).`);
+  });
+  if (!s.lines.length) s.errors.push("Aucune réplique trouvée : chaque ligne doit commencer par « Client : » ou « Vendeur : ».");
+  if (s.lines.length && !s.lines.some(x => x.side === "v")) s.errors.push("Aucune réplique du vendeur : le rôle de l’élève doit s’appeler Vendeur, Conseiller, Commercial, Négociateur, Agent ou Élève.");
+  return s;
+}
+
+/* ================= Voix ================= */
+const TTS = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+let VOICES = [];
+function loadVoices(){ try { VOICES = speechSynthesis.getVoices().filter(v => /^fr/i.test(v.lang)); } catch (e) { VOICES = []; } drawVoicePanel(); }
+if (TTS) { try { speechSynthesis.addEventListener("voiceschanged", loadVoices); } catch (e) {} setTimeout(loadVoices, 50); }
+function voiceFor(side){ const name = S.voice[side].v; let v = VOICES.find(x => x.name === name); if (!v && VOICES.length) v = VOICES[side === "v" && VOICES.length > 1 ? 1 : 0]; return v || null; }
+let PLAYTOKEN = 0;
+function stopAll(){ PLAYTOKEN++; if (TTS) try { speechSynthesis.cancel(); } catch (e) {} }
+function speak(text, side){
+  return new Promise(res => {
+    const words = text.split(/\s+/).length; const cfg = S.voice[side]; const rate = cfg.rate * S.speed;
+    const fallback = setTimeout(res, (words * 420) / rate + 1500);
+    if (!TTS) { return; }
+    try { const u = new SpeechSynthesisUtterance(text); u.lang = "fr-FR"; const v = voiceFor(side); if (v) u.voice = v; u.rate = rate; u.pitch = cfg.pitch;
+      u.onend = () => { clearTimeout(fallback); res(); }; u.onerror = () => { clearTimeout(fallback); res(); }; speechSynthesis.speak(u); } catch (e) { clearTimeout(fallback); res(); }
+  });
+}
+
+/* ================= Navigation ================= */
+const VIEWS = ["biblio","lecteur","creer","methode"];
+function route(){
+  let h = (location.hash || "#biblio").slice(1); if (!VIEWS.includes(h)) h = "biblio";
+  if (h === "lecteur" && !P) h = "biblio";
+  $$("section[data-view]").forEach(s => s.hidden = s.dataset.view !== h);
+  $$("nav.tabs a").forEach(a => a.dataset.tab === h ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current"));
+  if (h !== "lecteur") stopAll();
+  if (h === "biblio") drawLib(); if (h === "creer") drawPreview();
+  window.scrollTo({top:0});
+}
+window.addEventListener("hashchange", route);
+$("#dys-btn").addEventListener("click", () => { S.dys = !S.dys; save(); applyDys(); });
+function applyDys(){ document.body.classList.toggle("dys", S.dys); $("#dys-btn").setAttribute("aria-pressed", S.dys); $("#read-btn").setAttribute("aria-pressed", !!S.read); if (typeof A11Y !== "undefined") A11Y.refresh(); }
+$("#read-btn").addEventListener("click", () => { S.read = !S.read; save(); applyDys(); toast(S.read ? "Lecture activée : touche un texte pour l’entendre" : "Lecture désactivée"); });
+/* ===================== Accessibilité partagée : lecture à voix haute + « Relire ma réponse » ===================== */
+const A11Y = (() => {
+  const TTS = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  let O = {get: () => ({read:false, rate:1}), mainSel: "main", readSel: "", optSel: ""};
+  let voices = [], token = 0, bar = null;
+  const loadV = () => { try { voices = speechSynthesis.getVoices().filter(v => /^fr/i.test(v.lang)); } catch (e) {} };
+  if (TTS) { loadV(); try { speechSynthesis.addEventListener("voiceschanged", loadV); } catch (e) {} }
+  const READ = "h1,h2,h3,h4,p,li,td,th,dt,dd,summary,blockquote,.tip,.quote,.explain,.lede,.bigq,.ctxline,.kind,.card,.verdict,.feedback,.step-rev span,.fl-title,.fl-msg,.fl-info,.fl-cta";
+  const OPTS = ".opts button,.opt,.at-card,.pick,.lv-card,.mc-card,.sujet,.module,.cab,.fc-field,[data-o],.blk,.scard";
+  const SKIP = "button,a,input,textarea,select,label,[role=button],.a11y-ico,.a11y-relire,.a11y-bar,.flash,nav,header";
+  /* ---------- prononciation ---------- */
+  function prep(t){
+    t = String(t || "").replace(/\s+/g, " ").trim();
+    const R = [
+      [/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]/gu, ""],
+      [/(\d)\s*k€/g, "$1 mille euros"], [/€\s*HT\b/g, " euros hors taxes"], [/€\s*TTC\b/g, " euros toutes taxes comprises"], [/€/g, " euros"],
+      [/\bPV\b/g, "prix de vente"], [/\bPA\b/g, "prix d’achat"], [/\bHT\b/g, "hors taxes"], [/\bTTC\b/g, "toutes taxes comprises"], [/\bRDV\b/g, "rendez-vous"], [/\bCA\b/g, "chiffre d’affaires"],
+      [/\bR(\d{1,2})\b/g, "ressource $1"], [/\bJ\s?[−-]\s?(\d+)/g, "J moins $1"], [/\bJ\s?\+\s?(\d+)/g, "J plus $1"],
+      [/×/g, " multiplié par "], [/÷/g, " divisé par "], [/(\d)\s*[−–]\s*(\d)/g, "$1 moins $2"], [/\s=\s/g, " égale "], [/%/g, " pour cent"],
+      [/→/g, ", "], [/↗|↘|↻|←/g, " "], [/\bn°\s?/gi, "numéro "], [/m²/g, " mètres carrés"], [/\b1re\b/g, "première"], [/\bTle\b/g, "terminale"],
+      [/\bRGPD\b/g, "R G P D"], [/\bSIC\b/g, "S I C"], [/\bCRM\b/g, "C R M"], [/\bCHR\b/g, "C H R"], [/\bPFMP\b/g, "P F M P"], [/\bSST\b/g, "S S T"],
+      [/\bB to B\b|\bB2B\b/g, "B to B"], [/\bE2\b/g, "E deux"], [/«|»/g, ""], [/…/g, "..."], [/\s+/g, " "]
+    ];
+    R.forEach(([a, b]) => t = t.replace(a, b)); return t.trim();
+  }
+  function say(text){
+    const t = prep(text);
+    return new Promise(res => {
+      if (!TTS || !t) return res();
+      try {
+        const u = new SpeechSynthesisUtterance(t); u.lang = "fr-FR";
+        const v = voices.find(x => /fr[-_]FR/i.test(x.lang)) || voices[0]; if (v) u.voice = v;
+        u.rate = +(O.get().rate || 1); let done = false; const fin = () => { if (!done) { done = true; res(); } };
+        u.onend = fin; u.onerror = fin; setTimeout(fin, 2500 + t.length * 95 / u.rate);
+        speechSynthesis.speak(u);
+      } catch (e) { res(); }
+    });
+  }
+  function stop(){ token++; try { speechSynthesis.cancel(); } catch (e) {} document.querySelectorAll(".a11y-reading").forEach(e => e.classList.remove("a11y-reading")); setBar(false); }
+  const textOf = el => { const c = el.cloneNode(true); c.querySelectorAll(".a11y-ico,.a11y-relire,[hidden],.sr-skip").forEach(x => x.remove());
+    c.querySelectorAll(".kind,.eyebrow,.k").forEach(x => x.after(". ")); c.querySelectorAll("span,b,i,small,strong,em,label,br").forEach(x => x.after(" "));
+    return (c.textContent || "").replace(/\s+/g, " "); };
+  async function readEls(els){
+    stop(); const my = ++token; setBar(true);
+    for (const el of els) {
+      if (my !== token) return; const t = textOf(el); if (!prep(t)) continue;
+      el.classList.add("a11y-reading"); try { el.scrollIntoView({block:"nearest", behavior:"smooth"}); } catch (e) {}
+      await say(t); el.classList.remove("a11y-reading");
+    }
+    if (my === token) setBar(false);
+  }
+  const visible = el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length) && !el.closest("[hidden]");
+  function sectionEls(){
+    const root = document.querySelector(O.mainSel); if (!root) return [];
+    const sel = READ + (O.readSel ? "," + O.readSel : "");
+    const all = [...root.querySelectorAll(sel + "," + OPTS + (O.optSel ? "," + O.optSel : ""))].filter(visible);
+    return all.filter(el => !all.some(o => o !== el && el.contains(o)) && !el.closest(".a11y-bar"));
+  }
+  /* ---------- barre « Lire la page » ---------- */
+  function setBar(playing){
+    if (!bar) return; bar.querySelector("[data-a11y=play]").hidden = playing; bar.querySelector("[data-a11y=stop]").hidden = !playing;
+  }
+  function ensureBar(){
+    if (bar) { bar.hidden = !O.get().read || !TTS; return; }
+    bar = document.createElement("div"); bar.className = "a11y-bar"; bar.setAttribute("role", "region"); bar.setAttribute("aria-label", "Lecture à voix haute");
+    bar.innerHTML = `<button type="button" data-a11y="play">🔈 Lire la page</button><button type="button" data-a11y="stop" hidden>⏹ Arrêter</button>`;
+    bar.addEventListener("click", e => { const b = e.target.closest("[data-a11y]"); if (!b) return; if (b.dataset.a11y === "play") readEls(sectionEls()); else stop(); });
+    document.body.appendChild(bar); bar.hidden = !O.get().read || !TTS;
+  }
+  /* ---------- décorations : icônes 🔈 sur les choix, « Relire ma réponse » ---------- */
+  function decorate(){
+    if (!TTS) return; const on = O.get().read;
+    document.querySelectorAll(OPTS + (O.optSel ? "," + O.optSel : "")).forEach(el => {
+      const has = el.querySelector(":scope > .a11y-ico");
+      if (on && !has && !el.closest(".a11y-bar")) { const s = document.createElement("span"); s.className = "a11y-ico"; s.setAttribute("role", "button"); s.setAttribute("aria-label", "Écouter"); s.textContent = "🔈"; el.prepend(s); }
+      if (!on && has) has.remove();
+    });
+    document.querySelectorAll("textarea:not([readonly]):not([data-a11y-no])").forEach(ta => {
+      if (ta.nextElementSibling?.classList.contains("a11y-relire")) return;
+      const b = document.createElement("button"); b.type = "button"; b.className = "a11y-relire"; b.textContent = "🔈 Relire ma réponse";
+      ta.insertAdjacentElement("afterend", b);
+    });
+  }
+  let deb = 0; const mo = new MutationObserver(() => { clearTimeout(deb); deb = setTimeout(decorate, 60); });
+  document.addEventListener("click", e => {
+    const ico = e.target.closest(".a11y-ico");
+    if (ico) { e.preventDefault(); e.stopPropagation(); readEls([ico.parentElement]); return; }
+    const rl = e.target.closest(".a11y-relire");
+    if (rl) { e.preventDefault(); e.stopPropagation(); const ta = rl.previousElementSibling;
+      if (rl.dataset.on) { stop(); return; }
+      const v = (ta?.value || "").trim(); if (!v) { say("Ta réponse est vide."); return; }
+      stop(); const my = ++token; rl.dataset.on = 1; rl.textContent = "⏹ Arrêter la relecture"; ta.classList.add("a11y-reading");
+      const parts = v.split(/(?<=[.!?;:\n])\s+/).filter(Boolean);
+      (async () => { for (const p of parts) { if (my !== token) break; await say(p); } ta.classList.remove("a11y-reading"); delete rl.dataset.on; rl.textContent = "🔈 Relire ma réponse"; })();
+      return; }
+    if (!O.get().read || !TTS) return;
+    if (e.target.closest(SKIP)) return;
+    const root = document.querySelector(O.mainSel); if (!root || !root.contains(e.target)) return;
+    const el = e.target.closest(READ + (O.readSel ? "," + O.readSel : "")); if (el && root.contains(el)) readEls([el]);
+  }, true);
+  /* « Relire » : arrêter l’état quand on stoppe */
+  const _stop = stop;
+  return {
+    TTS, say, prep,
+    stop(){ _stop(); document.querySelectorAll(".a11y-relire[data-on]").forEach(b => { delete b.dataset.on; b.textContent = "🔈 Relire ma réponse"; }); },
+    init(opts){ O = {...O, ...opts}; ensureBar(); decorate(); mo.observe(document.body, {childList:true, subtree:true}); },
+    refresh(){ ensureBar(); decorate(); if (!O.get().read) _stop(); },
+    test(){ return say("Bonjour ! Voici la voix qui lira les consignes et les documents."); }
+  };
+})();
+
+A11Y.init({get: () => ({read: !!S.read, rate: S.speed || 1}), mainSel: "main", readSel: ".techs > div,.line,.syntax pre"});
+if (!A11Y.TTS) $("#read-btn").hidden = true;
+
+/* ================= Bibliothèque ================= */
+let FILTER = "Tous";
+function allScripts(){ return [...LIBRARY.map(t => ({text:t, own:false})), ...S.mine.map(m => ({text:m.text, own:true, id:m.id}))]; }
+function drawLib(){
+  const levels = ["Tous","2de","1re A","1re B","Mes scripts"];
+  $("#lib-filter").innerHTML = levels.map(l => `<button class="chip" data-f="${l}" aria-pressed="${l===FILTER}">${l}</button>`).join("");
+  const list = allScripts().map(x => ({...x, p:parse(x.text)})).filter(x => FILTER === "Tous" || (FILTER === "Mes scripts" ? x.own : x.p.niveau === FILTER));
+  $("#lib").innerHTML = list.map((x, i) => { const r = S.res[x.p.id] || {}; const techN = x.p.lines.filter(l => l.tech).length;
+    return `<div class="scard"><div class="tags">${x.p.niveau ? `<span class="tag">${esc(x.p.niveau)}</span>` : ""}<span class="tag ${x.own ? "a" : ""}">${x.own ? "Mon script" : "Exemple"}</span></div>
+      <h3>${esc(x.p.titre)}</h3><p>${esc(x.p.contexte || "")}</p>
+      <span class="meta">${x.p.lines.length} répliques · ${x.p.infos.length} infos à noter · ${techN} techniques · ${x.p.qs.length} questions</span>
+      ${r.notes != null || r.tech != null ? `<span class="meta">Notes : ${r.notes ?? "—"} % · Techniques : ${r.tech ?? "—"} %</span>` : ""}
+      <div class="row"><button class="btn primary sm" data-open="${esc(x.text)}">S’entraîner</button>${x.own ? `<button class="btn sm" data-edit="${x.id}">Modifier</button><button class="btn ghost sm" data-del="${x.id}">Supprimer</button>` : `<button class="btn ghost sm" data-copy-tpl="${esc(x.text)}">Copier pour l’adapter</button>`}</div></div>`; }).join("") || `<p class="muted">Aucun script ici pour l’instant. Va dans « Créer / importer ».</p>`;
+}
+$("#lib-filter").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (b) { FILTER = b.dataset.f; drawLib(); } });
+$("#lib").addEventListener("click", e => {
+  const o = e.target.closest("[data-open]"); if (o) return openPlayer(o.dataset.open);
+  const ed = e.target.closest("[data-edit]"); if (ed) { const m = S.mine.find(x => x.id === ed.dataset.edit); S.draft = m.text; S.editing = m.id; save(); location.hash = "creer"; $("#ed").value = m.text; drawPreview(); return; }
+  const cp = e.target.closest("[data-copy-tpl]"); if (cp) { S.draft = cp.dataset.copyTpl; S.editing = null; save(); $("#ed").value = S.draft; location.hash = "creer"; toast("Script copié dans l’éditeur : adapte-le puis enregistre-le"); return; }
+  const d = e.target.closest("[data-del]"); if (d) { if (!d.dataset.sure) { d.dataset.sure = "1"; d.textContent = "Confirmer"; return; } S.mine = S.mine.filter(x => x.id !== d.dataset.del); save(); drawLib(); toast("Script supprimé"); }
+});
+
+/* ================= Éditeur ================= */
+const MODEL = `Titre : Mon script d’entraînement
+Niveau : 1re B
+Contexte : Une phrase pour situer la scène (qui appelle qui, pourquoi).
+Client : Bonjour, je vous appelle pour {besoin:un devis d’assurance auto}.
+Vendeur [Question ouverte] : Bonjour Madame, avec plaisir. Pouvez-vous me parler de votre véhicule ?
+Client : C’est {véhicule:une petite citadine de deux mille vingt}, je roule surtout en ville.
+Vendeur [Reformulation] : Si je comprends bien, il s’agit d’une citadine récente, utilisée en ville.
+? Pour quel produit la cliente appelle-t-elle ? = assurance auto | assurance`;
+$("#ed").value = S.draft || "";
+$("#ed").addEventListener("input", () => { S.draft = $("#ed").value; save(); drawPreview(); });
+$("#ed-model").onclick = () => { $("#ed").value = MODEL; S.draft = MODEL; S.editing = null; save(); drawPreview(); };
+$("#ed-clear").onclick = () => { $("#ed").value = ""; S.draft = ""; S.editing = null; save(); drawPreview(); };
+$("#ed-play").onclick = () => { const t = $("#ed").value; if (!parse(t).lines.length) return toast("Le script ne contient aucune réplique lisible"); openPlayer(t); };
+$("#ed-save").onclick = () => { const t = $("#ed").value.trim(); const p = parse(t); if (!p.lines.length) return toast("Rien à enregistrer : ajoute des répliques");
+  if (S.editing) { const m = S.mine.find(x => x.id === S.editing); if (m) { m.text = t; m.date = Date.now(); } } else { const id = "m" + Date.now().toString(36); S.mine.push({id, text:t, date:Date.now()}); S.editing = id; }
+  save(); toast("Enregistré dans « Mes scripts »"); };
+$("#ed-copy").onclick = () => { const t = $("#ed").value; try { navigator.clipboard.writeText(t).then(() => toast("Texte copié : colle-le dans Pronote ou Moodle"), () => { $("#ed").select(); toast("Texte sélectionné : fais Ctrl + C"); }); } catch (e) { $("#ed").select(); toast("Texte sélectionné : fais Ctrl + C"); } };
+function drawPreview(){
+  const t = $("#ed").value; const box = $("#ed-preview");
+  if (!t.trim()) { box.innerHTML = `<p class="muted">Colle un script ou clique sur « Insérer un modèle ».</p>`; return; }
+  const p = parse(t); const sp = [...new Set(p.lines.map(l => l.who + (l.side === "v" ? " (rôle de l’élève)" : " (interlocuteur)")))];
+  box.innerHTML = `<h3 class="h2" style="font-size:1.05rem">Ce que l’appli a compris</h3>
+   <ul style="margin:0;padding-left:1.1em;display:grid;gap:3px;font-size:.93rem"><li><b>${esc(p.titre)}</b>${p.niveau ? " · " + esc(p.niveau) : ""}</li><li>${p.lines.length} répliques · personnages : ${esc(sp.join(", ")) || "—"}</li>
+   <li>${p.lines.filter(l => l.tech).length} techniques étiquetées${p.lines.some(l => l.tech) ? " : " + esc([...new Set(p.lines.filter(l => l.tech).map(l => l.tech))].join(", ")) : " (l’exercice « Repérer la technique » sera indisponible)"}</li>
+   <li>${p.infos.length} informations à noter${p.infos.length ? " : " + esc(p.infos.map(i => i.k).join(", ")) : ""}</li><li>${p.qs.length} questions de compréhension</li></ul>
+   ${p.errors.map(e => `<p class="warn">⚠ ${esc(e)}</p>`).join("")}`;
+}
+
+/* ================= Lecteur ================= */
+let P = null;
+const MODES = {ecoute:"🎧 Écouter", notes:"📝 Prendre des notes", tech:"🔍 Repérer la technique", role:"🎭 À toi de répondre"};
+function openPlayer(text){ stopAll(); const p = parse(text); P = {p, text, mode:"ecoute", idx:-1, playing:false, showText:true, answers:{}, techScore:{ok:0, n:0}, replies:[], listens:0, done:false}; location.hash = "lecteur"; drawPlayer(); }
+function setMode(m){ stopAll(); Object.assign(P, {mode:m, idx:-1, playing:false, showText: m === "ecoute" || m === "tech", answers:{}, techScore:{ok:0, n:0}, replies:[], listens:0, done:false, revealed:{}, techAnswered:{}, compared:false, notesText:""}); drawPlayer(); }
+function drawPlayer(){
+  const p = P.p; const hasTech = p.lines.some(l => l.tech) && p.lines.some(l => l.side === "v" && l.tech);
+  $("#player-root").innerHTML = `<div class="row"><a class="btn ghost sm" href="#biblio">← Tous les scripts</a></div>
+   <div style="display:grid;gap:6px"><div class="tags">${p.niveau ? `<span class="tag">${esc(p.niveau)}</span>` : ""}</div><h1 class="h1" style="font-size:clamp(1.5rem,4vw,2.1rem)">${esc(p.titre)}</h1>${p.contexte ? `<p class="lede">${esc(p.contexte)}</p>` : ""}</div>
+   <div class="modes">${Object.entries(MODES).map(([k,v]) => `<button class="chip" data-mode="${k}" aria-pressed="${P.mode===k}" ${k==="tech" && !hasTech ? "disabled title=\"Aucune technique étiquetée dans ce script\"" : ""}>${v}</button>`).join("")}</div>
+   <p class="tip" id="mode-help">${({ecoute:"Écoute le dialogue en entier. Touche une réplique pour la réentendre. Les informations importantes sont surlignées à la fin.",
+      notes:"Le texte est caché, comme au téléphone. Écoute et note les informations importantes dans le cadre de droite, puis compare.",
+      tech:"Après chaque réplique du vendeur, choisis la technique d’écoute qu’il vient d’utiliser.",
+      role:"Tu es le vendeur. À chaque fois que c’est ton tour, écris (ou dis à voix haute) ta réponse, puis compare avec le modèle."})[P.mode]}</p>
+   <div class="player"><div style="display:grid;gap:12px;min-width:0">
+     <div class="ctrl"><button class="btn primary" id="pl-play">${P.playing ? "⏸ Pause" : P.idx >= 0 && !P.done ? "▶ Continuer" : "▶ Lancer"}</button><button class="btn" id="pl-restart">⏮ Recommencer</button>
+      ${P.mode === "ecoute" ? `<button class="btn ghost" id="pl-text">${P.showText ? "🙈 Cacher le texte" : "👁 Afficher le texte"}</button>` : ""}
+      <label class="muted" style="font-size:.88rem">Vitesse <select id="pl-speed">${[0.7,0.85,1,1.15,1.3].map(v => `<option value="${v}" ${S.speed==v?"selected":""}>${v === 1 ? "normale" : "× " + String(v).replace(".", ",")}</option>`).join("")}</select></label>
+      ${!TTS ? `<span class="warn">Pas de voix sur cet appareil : lis le texte.</span>` : ""}</div>
+     <div class="transcript" id="tr" aria-live="polite"></div><div id="ask"></div><div id="after"></div></div>
+   <div class="side">${P.mode === "notes" ? `<div class="panel"><b>Mes notes</b><textarea class="copy notes" id="pl-notes" placeholder="Besoin, budget, délai, nom, téléphone…">${esc(P.notesText || "")}</textarea><button class="btn primary" id="pl-compare">J’ai fini : comparer</button></div>` : ""}
+     <div class="panel" id="voice-panel"></div>
+     ${P.mode === "tech" ? `<div class="panel"><b>Score</b><span class="mono" id="tech-score">0 / 0</span></div>` : ""}</div></div>`;
+  $$("[data-mode]").forEach(b => b.onclick = () => !b.disabled && setMode(b.dataset.mode));
+  $("#pl-play").onclick = togglePlay; $("#pl-restart").onclick = () => setMode(P.mode);
+  if ($("#pl-text")) $("#pl-text").onclick = () => { P.showText = !P.showText; drawPlayer(); };
+  $("#pl-speed").onchange = e => { S.speed = +e.target.value; save(); };
+  if ($("#pl-notes")) { $("#pl-notes").oninput = e => { P.notesText = e.target.value; }; $("#pl-compare").onclick = compareNotes; }
+  $("#tr").onclick = e => { const l = e.target.closest("[data-i]"); if (!l || P.playing) return; const i = +l.dataset.i; if (P.mode === "role" && P.p.lines[i].side === "v" && !P.revealed?.[i]) return; replay(i); };
+  drawTranscript(); drawVoicePanel(); if (P.mode === "tech") drawTechScore(); if (P.done) finish();
+}
+function lineHtml(l, i){
+  const visible = P.showText || (P.mode === "role" && (l.side === "c" || P.revealed?.[i])) || P.done || (P.mode === "notes" && P.done);
+  const showTech = l.tech && (P.done || (P.mode === "tech" && P.techAnswered?.[i]) || (P.mode === "role" && P.revealed?.[i]) || P.mode === "ecoute");
+  const body = visible ? (P.done ? l.html : esc(l.text)) : `<span class="masked">🔊 ${P.mode === "role" && l.side === "v" ? "À toi de répondre" : "Réplique à écouter"}</span>`;
+  return `<div class="line ${l.side} ${P.idx === i ? "now" : ""}" data-i="${i}" role="button" tabindex="0"><span class="who">${esc(l.who)}${showTech ? `<span class="tech">${esc(l.tech)}</span>` : ""}</span><span>${body}</span></div>`;
+}
+function drawTranscript(){ const reached = P.done ? P.p.lines.length - 1 : P.idx; const tr = $("#tr"); if (!tr) return;
+  tr.innerHTML = reached < 0 ? `<p class="muted">Appuie sur « Lancer » pour démarrer.${!TTS ? " (Lecture silencieuse : le texte s’affiche réplique par réplique.)" : ""}</p>` : P.p.lines.slice(0, reached + 1).map(lineHtml).join("");
+  const now = tr.querySelector(".now"); if (now) now.scrollIntoView({block:"nearest", behavior:"smooth"}); }
+function drawVoicePanel(){
+  const box = $("#voice-panel"); if (!box) return;
+  if (!TTS) { box.innerHTML = `<b>Voix</b><p class="muted">La synthèse vocale n’est pas disponible sur cet appareil ou ce navigateur.</p>`; return; }
+  const opt = side => [`<option value="">Automatique</option>`, ...VOICES.map(v => `<option value="${esc(v.name)}" ${S.voice[side].v === v.name ? "selected" : ""}>${esc(v.name)}</option>`)].join("");
+  box.innerHTML = `<b>Voix</b>${VOICES.length ? "" : `<p class="muted" style="font-size:.85rem">Aucune voix française trouvée : la voix par défaut de l’appareil sera utilisée.</p>`}
+   ${["c","v"].map(side => `<div style="display:grid;gap:6px;border-top:1px solid var(--rule);padding-top:8px"><b style="font-size:.9rem">${side === "c" ? "Client / interlocuteur" : "Vendeur (ton rôle)"}</b>
+    <label>Voix <select data-vs="${side}">${opt(side)}</select></label>
+    <label>Débit <input type="range" min="0.6" max="1.6" step="0.05" value="${S.voice[side].rate}" data-vr="${side}"></label>
+    <label>Tonalité <input type="range" min="0.5" max="1.6" step="0.05" value="${S.voice[side].pitch}" data-vp="${side}"></label>
+    <button class="btn sm" data-vt="${side}" style="justify-self:start">🔊 Tester</button></div>`).join("")}`;
+  box.onchange = box.oninput = e => { const t = e.target; if (t.dataset.vs) S.voice[t.dataset.vs].v = t.value; if (t.dataset.vr) S.voice[t.dataset.vr].rate = +t.value; if (t.dataset.vp) S.voice[t.dataset.vp].pitch = +t.value; save(); };
+  box.onclick = e => { const b = e.target.closest("[data-vt]"); if (b) { stopAll(); speak(b.dataset.vt === "c" ? "Bonjour, je vous appelle au sujet de votre annonce." : "Bonjour Madame, je vous écoute. Que puis-je faire pour vous ?", b.dataset.vt); } };
+}
+async function replay(i){ stopAll(); const tok = PLAYTOKEN; const old = P.idx; P.idx = i; drawTranscript(); await speak(P.p.lines[i].text, P.p.lines[i].side); if (tok !== PLAYTOKEN) return; P.idx = old; P.listens++; drawTranscript(); }
+function togglePlay(){ if (P.playing) { stopAll(); P.playing = false; drawControls(); return; } if (P.done) return setMode(P.mode); run(); }
+function drawControls(){ const b = $("#pl-play"); if (b) b.textContent = P.playing ? "⏸ Pause" : P.idx >= 0 && !P.done ? "▶ Continuer" : "▶ Lancer"; }
+async function run(){
+  stopAll(); const tok = PLAYTOKEN; P.playing = true; drawControls(); $("#ask").innerHTML = "";
+  while (tok === PLAYTOKEN) {
+    const i = P.idx + 1; if (i >= P.p.lines.length) { P.playing = false; P.done = true; drawControls(); finish(); return; }
+    const l = P.p.lines[i];
+    if (P.mode === "role" && l.side === "v" && !P.revealed?.[i]) { P.idx = i; drawTranscript(); P.playing = false; drawControls(); return askReply(i); }
+    P.idx = i; drawTranscript(); await speak(l.text, l.side); if (tok !== PLAYTOKEN) return; P.listens++;
+    if (P.mode === "tech" && l.side === "v" && l.tech && !P.techAnswered?.[i]) { P.playing = false; drawControls(); return askTech(i); }
+    await sleep(350);
+  }
+}
+function askTech(i){
+  const l = P.p.lines[i]; const names = TECHS.map(t => t[0]); const pool = shuffle(names.filter(n => n !== l.tech)).slice(0, 3); const opts = shuffle([l.tech, ...pool]);
+  $("#ask").innerHTML = `<div class="ask"><b>Quelle technique le vendeur vient-il d’utiliser ?</b><div class="opts">${opts.map(o => `<button class="btn" data-t="${esc(o)}">${esc(o)}</button>`).join("")}</div><div id="ask-fb"></div></div>`;
+  $("#ask").querySelector(".ask").scrollIntoView({block:"nearest", behavior:"smooth"});
+  $("#ask").onclick = e => { const b = e.target.closest("[data-t]"); if (!b || P.techAnswered?.[i]) return; P.techAnswered ??= {}; P.techAnswered[i] = true; const ok = b.dataset.t === l.tech; P.techScore.n++; if (ok) P.techScore.ok++;
+    $$("#ask [data-t]").forEach(x => { if (x.dataset.t === l.tech) x.classList.add("primary"); else if (x === b) x.classList.add("red"); x.disabled = true; });
+    const def = TECHS.find(t => t[0] === l.tech); $("#ask-fb").innerHTML = `<p class="feedback ${ok ? "ok" : "ko"}">${ok ? "✓ Bien vu !" : `✕ C’était : ${esc(l.tech)}`}</p>${def ? `<p class="explain">${esc(def[1])} Exemple : ${esc(def[2])}</p>` : ""}<button class="btn primary" id="ask-next">Continuer ▶</button>`;
+    drawTranscript(); drawTechScore(); $("#ask-next").onclick = () => { $("#ask").innerHTML = ""; run(); }; $("#ask-next").focus({preventScroll:true}); };
+}
+function drawTechScore(){ const s = $("#tech-score"); if (s) s.textContent = `${P.techScore.ok} / ${P.techScore.n}`; }
+function askReply(i){
+  const prev = [...P.p.lines.slice(0, i)].reverse().find(l => l.side === "c");
+  $("#ask").innerHTML = `<div class="ask"><b>À toi ! Que réponds-tu ?</b>${prev ? `<span class="muted">Le client vient de dire : « ${esc(prev.text)} »</span>` : ""}
+    <textarea id="reply" placeholder="Écris ta réponse, ou dis-la à voix haute à ton binôme…"></textarea>
+    <div class="row"><button class="btn primary" id="reply-go">Comparer avec le modèle</button>${prev ? `<button class="btn ghost" id="reply-again">🔊 Réécouter le client</button>` : ""}</div><div id="reply-fb"></div></div>`;
+  $("#reply").focus({preventScroll:true}); $("#ask").querySelector(".ask").scrollIntoView({block:"nearest", behavior:"smooth"});
+  if ($("#reply-again")) $("#reply-again").onclick = () => { stopAll(); speak(prev.text, "c"); };
+  $("#reply-go").onclick = async () => { const mine = $("#reply").value.trim(); const l = P.p.lines[i]; P.revealed ??= {}; P.revealed[i] = true; P.replies.push({i, mine, model:l.text, tech:l.tech});
+    const def = l.tech ? TECHS.find(t => t[0] === l.tech) : null;
+    $("#reply-fb").innerHTML = `<p class="explain"><b>Réponse modèle${l.tech ? ` (${esc(l.tech)})` : ""} :</b> « ${esc(l.text)} »${def ? `<br><span class="muted">${esc(def[1])}</span>` : ""}</p><p class="muted" style="font-size:.88rem">Compare : as-tu repris ce que le client a dit ? as-tu posé une question pour en savoir plus ?</p><button class="btn primary" id="reply-next">Continuer ▶</button>`;
+    $("#reply-go").disabled = true; drawTranscript(); $("#reply-next").onclick = () => { $("#ask").innerHTML = ""; run(); }; stopAll(); await speak(l.text, "v"); };
+}
+function finish(){
+  drawTranscript(); const p = P.p; const box = $("#after"); if (!box) return;
+  if (P.mode === "ecoute") { box.innerHTML = `<div class="bilan"><p class="eyebrow">Écoute terminée</p><h2 class="h2">${p.infos.length} informations clés à retenir</h2><p class="muted">Elles sont surlignées dans le dialogue. Essaie maintenant « Prendre des notes » sans regarder le texte.</p><div class="row"><button class="btn primary" data-go="notes">📝 Prendre des notes</button>${p.lines.some(l => l.tech) ? `<button class="btn" data-go="tech">🔍 Repérer la technique</button>` : ""}</div></div>`; }
+  if (P.mode === "tech") { const pc = P.techScore.n ? Math.round(P.techScore.ok / P.techScore.n * 100) : 0; S.res[p.id] = {...S.res[p.id], tech: Math.max(pc, S.res[p.id]?.tech || 0)}; save();
+    box.innerHTML = `<div class="bilan"><p class="eyebrow">Techniques repérées</p><h2 class="h2">${P.techScore.ok} / ${P.techScore.n} — <span class="mono">${pc} %</span></h2><p class="muted">Toutes les techniques sont maintenant affichées dans le dialogue. Relis celles que tu as confondues.</p><div class="row"><button class="btn primary" data-go="role">🎭 À toi de répondre</button><button class="btn" data-go="tech">Rejouer</button></div></div>`; }
+  if (P.mode === "role") { box.innerHTML = `<div class="bilan"><p class="eyebrow">Jeu de rôle terminé</p><h2 class="h2">Tes réponses et les modèles</h2><div class="recap">${P.replies.map(r => `<div class="r"><span><b>Toi :</b> ${r.mine ? esc(r.mine) : "<i>(réponse à l’oral)</i>"}</span><span class="muted"><b>Modèle${r.tech ? " · " + esc(r.tech) : ""} :</b> ${esc(r.model)}</span></div>`).join("")}</div><div class="row"><button class="btn" id="copy-replies">Copier mes réponses</button><button class="btn primary" data-go="role">Rejouer</button></div></div>`;
+    $("#copy-replies").onclick = () => { const t = `${p.titre}\n` + P.replies.map((r, k) => `${k+1}. Moi : ${r.mine || "(oral)"}\n   Modèle : ${r.model}`).join("\n"); try { navigator.clipboard.writeText(t).then(() => toast("Réponses copiées"), () => toast("Copie impossible ici")); } catch (e) { toast("Copie impossible ici"); } }; }
+  if (P.mode === "notes" && !P.compared) { box.innerHTML = `<div class="tip">Dialogue terminé. Complète tes notes, puis clique sur « J’ai fini : comparer ».</div>`; }
+  box.onclick = e => { const b = e.target.closest("[data-go]"); if (b) setMode(b.dataset.go); };
+}
+function infoFound(info, notes){
+  const STOP = /^(les|des|sur|une|par|pour|dans|avec|aux|du|de|la|le|un|et|en|au|ses|son|sa|mes|mon|ma|est|qui|que|pas|plus|tres|vers|chez|par)$/;
+  const n = " " + norm(notes) + " "; const words = norm(info.v).split(" ").filter(w => (w.length > 2 || /\d/.test(w)) && !STOP.test(w));
+  if (!words.length) return false; const hit = words.filter(w => n.includes(" " + w) || n.includes(w)).length;
+  const digits = (info.v.match(/\d+/g) || []); const numOk = digits.length && digits.every(d => n.includes(d));
+  return hit / words.length >= 0.5 || numOk;
+}
+const NUMS = {zero:"0",un:"1",une:"1",deux:"2",trois:"3",quatre:"4",cinq:"5",six:"6",sept:"7",huit:"8",neuf:"9",dix:"10",onze:"11",douze:"12",quinze:"15",vingt:"20",trente:"30",quarante:"40",cinquante:"50",soixante:"60",cent:"100"};
+const withDigits = s => norm(s).split(" ").map(w => NUMS[w] || w).join(" ");
+function answerOk(given, ans){ const g = " " + norm(given) + " ", gd = " " + withDigits(given) + " "; return ans.some(a => { const x = norm(a), xd = withDigits(a); return x && (g.includes(x) || gd.includes(xd)); }); }
+function compareNotes(){
+  if (!P.done) { stopAll(); P.playing = false; P.done = true; drawControls(); }
+  P.compared = true; const p = P.p; const notes = P.notesText || "";
+  const res = p.infos.map(i => ({i, ok: infoFound(i, notes) || infoFound({v: withDigits(i.v)}, withDigits(notes))}));
+  const nOk = res.filter(r => r.ok).length; drawTranscript();
+  $("#after").innerHTML = `<div class="bilan"><p class="eyebrow">Comparaison de tes notes</p><h2 class="h2">${nOk} / ${p.infos.length} informations clés notées</h2>
+   <ul class="found">${res.map(r => `<li class="${r.ok ? "on" : "off"}"><b>${esc(r.i.k)}</b> : ${esc(r.i.v)}</li>`).join("")}</ul>
+   ${p.qs.length ? `<h3 class="h2" style="font-size:1.05rem;margin-top:8px">Questions de compréhension</h3>${p.qs.map((q, k) => `<div class="qrow"><label for="q${k}">${esc(q.q)}</label><input id="q${k}" autocomplete="off"></div>`).join("")}<div class="row"><button class="btn primary" id="q-check">Vérifier mes réponses</button></div><div id="q-res"></div>` : ""}
+   <p class="muted" style="font-size:.88rem">Les informations sont surlignées dans le dialogue. Écoutes supplémentaires utilisées : ${Math.max(0, P.listens - p.lines.length)}.</p><div class="row"><button class="btn" data-go="notes">Recommencer</button>${p.lines.some(l => l.tech) ? `<button class="btn" data-go="tech">🔍 Repérer la technique</button>` : ""}</div></div>`;
+  const saveScore = qOk => { const tot = p.infos.length + p.qs.length; const pc = tot ? Math.round((nOk + (qOk || 0)) / tot * 100) : 0; S.res[p.id] = {...S.res[p.id], notes: Math.max(pc, S.res[p.id]?.notes || 0)}; save(); return pc; };
+  saveScore(0);
+  if ($("#q-check")) $("#q-check").onclick = () => { let ok = 0; p.qs.forEach((q, k) => { const inp = $("#q" + k); const good = answerOk(inp.value, q.ans); inp.classList.toggle("ok", good); inp.classList.toggle("ko", !good); if (good) ok++; });
+    const pc = saveScore(ok); $("#q-res").innerHTML = `<p class="feedback ${ok === p.qs.length ? "ok" : "ko"}">${ok} / ${p.qs.length} bonnes réponses · score total ${pc} %</p>${p.qs.map(q => `<p class="muted" style="font-size:.88rem">${esc(q.q)} → <b>${esc(q.ans[0] || "")}</b></p>`).join("")}`; };
+  $("#after").onclick = e => { const b = e.target.closest("[data-go]"); if (b) setMode(b.dataset.go); };
+}
+
+$("#techs").innerHTML = TECHS.map(t => `<div><b>${esc(t[0])}</b><span>${esc(t[1])}</span><i>${esc(t[2])}</i></div>`).join("");
+applyDys(); route();
+
+</script>
+
+</body></html>
