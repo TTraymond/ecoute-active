@@ -332,6 +332,14 @@ mark.info{background:linear-gradient(transparent 10%,var(--hl) 10%,var(--hl) 90%
 .m-res{margin:0;font-weight:700;color:var(--ok)}
 .m-reflex{display:grid;gap:10px}
 .m-prev{white-space:pre-wrap;font-family:var(--f-mono);font-size:.78rem;background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:10px;max-height:340px;overflow:auto;margin:0}
+.m-replies{border:1px solid var(--rule);border-radius:10px;padding:8px 12px;font-size:.92rem}.m-replies summary{cursor:pointer;font-weight:700}.m-replies p{margin:8px 0 0}
+.m-auto,.m-vm,.m-dem{display:grid;gap:8px;background:var(--blue-soft);border-radius:12px;padding:12px}
+.m-auto label{display:flex;gap:8px;align-items:flex-start;font-size:.95rem}.m-auto input{width:20px;height:20px;flex:none;margin-top:2px}
+.m-vm textarea{width:100%;box-sizing:border-box;border:1px solid var(--rule-strong);border-radius:8px;padding:8px 10px;background:var(--paper);color:var(--ink);font-size:16px;font-family:var(--f-body)}
+.m-demrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:8px;align-items:end;border-top:1px solid var(--rule-strong);padding-top:8px}
+.m-demn{width:26px;height:26px;border-radius:50%;background:var(--blue);color:var(--paper);display:grid;place-items:center;font-weight:800;font-size:.85rem;align-self:center}
+.m-demrow label{display:grid;gap:3px;font-size:.82rem;color:var(--ink-2)}.m-demrow input,.m-demrow select{width:100%;box-sizing:border-box;border:1px solid var(--rule-strong);border-radius:8px;padding:7px 8px;background:var(--paper);color:var(--ink);font-size:16px;font-family:var(--f-body)}
+.btn.red{background:var(--red);color:#fff;border-color:var(--red)}
 @media (max-width:440px){nav.tabs{gap:0}nav.tabs a{padding:6px 6px;font-size:.78rem}.m-banner{grid-template-columns:auto 1fr}.m-banner>b{grid-column:1/-1}}
 .a11y-bar{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:35;display:flex;gap:6px}
 .a11y-bar[hidden]{display:none!important}
@@ -919,8 +927,9 @@ Vendeur [Reformulation] : Si je comprends bien, il s’agit d’une citadine ré
 ? Pour quel produit la cliente appelle-t-elle ? = assurance auto | assurance`;
 $("#ed").value = S.draft || "";
 $("#ed").addEventListener("input", () => { S.draft = $("#ed").value; save(); drawPreview(); });
-$("#ed-model").onclick = () => { $("#ed").value = MODEL; S.draft = MODEL; S.editing = null; save(); drawPreview(); };
-$("#ed-clear").onclick = () => { $("#ed").value = ""; S.draft = ""; S.editing = null; save(); drawPreview(); };
+function confirmBtn(b, label, fn){ if ($("#ed").value.trim() && !b.dataset.sure) { b.dataset.sure = "1"; const old = b.textContent; b.textContent = label; b.classList.add("red"); setTimeout(() => { delete b.dataset.sure; b.textContent = old; b.classList.remove("red"); }, 3500); return; } delete b.dataset.sure; fn(); }
+$("#ed-model").onclick = e => confirmBtn(e.currentTarget, "⚠ Remplacer mon texte ? Appuie encore", () => { $("#ed").value = MODEL; S.draft = MODEL; S.editing = null; save(); drawPreview(); $("#ed-model").textContent = "Insérer un modèle"; $("#ed-model").classList.remove("red"); });
+$("#ed-clear").onclick = e => confirmBtn(e.currentTarget, "⚠ Tout effacer ? Appuie encore", () => { $("#ed").value = ""; S.draft = ""; S.editing = null; save(); drawPreview(); $("#ed-clear").textContent = "Vider"; $("#ed-clear").classList.remove("red"); });
 $("#ed-play").onclick = () => { const t = $("#ed").value; if (!parse(t).lines.length) return toast("Le script ne contient aucune réplique lisible"); openPlayer(t); };
 $("#ed-save").onclick = () => { const t = $("#ed").value.trim(); const p = parse(t); if (!p.lines.length) return toast("Rien à enregistrer : ajoute des répliques");
   if (S.editing) { const m = S.mine.find(x => x.id === S.editing); if (m) { m.text = t; m.date = Date.now(); } } else { const id = "m" + Date.now().toString(36); S.mine.push({id, text:t, date:Date.now()}); S.editing = id; }
@@ -1073,7 +1082,7 @@ function compareNotes(){
 
 $("#techs").innerHTML = TECHS.map(t => `<div><b>${esc(t[0])}</b><span>${esc(t[1])}</span><i>${esc(t[2])}</i></div>`).join("");
 /* ================= Mission PFMP (travail à distance) ================= */
-S.log ??= {}; S.mis ??= {r:{}, seen:{}};
+S.log ??= {}; S.mis ??= {r:{}, seen:{}}; S.mis.auto ??= {}; S.mis.vm ??= ""; S.mis.dem ??= [{}, {}, {}];
 const PID = Object.fromEntries(Object.entries(PFMP).map(([k, t]) => [k, parse(t).id]));
 const logOf = k => S.log[PID[k]] || {};
 const fdate = d => d ? new Date(d).toLocaleDateString("fr-FR") + " " + new Date(d).toLocaleTimeString("fr-FR", {hour:"2-digit", minute:"2-digit"}) : "";
@@ -1090,9 +1099,20 @@ function scriptChecks(t){
 const REFLEX = [
   ["presente", "Écris la phrase que tu diras pour te présenter au téléphone à une entreprise (2 ou 3 phrases)."],
   ["infos", "Quelles informations dois-tu absolument noter quand tu appelles ou quand tu passes dans une entreprise ? (au moins 4)"],
-  ["technique", "Quelle technique d’écoute t’a semblé la plus utile pour trouver un stage ? Pourquoi ?"],
-  ["entreprises", "Cite 2 entreprises près de chez toi que tu vas contacter pour ta PFMP (nom + téléphone ou visite)."]
+  ["technique", "Quelle technique d’écoute t’a semblé la plus utile pour trouver un stage ? Pourquoi ?"]
 ];
+const AUTO = [["comprends","J’ai montré que je comprenais (empathie : « Je comprends… »)"],["reformule","J’ai reformulé ce que la responsable a dit (« Si je comprends bien… »)"],["question","J’ai posé au moins une question pour en savoir plus"],["creneaux","J’ai proposé deux créneaux de rendez-vous (question alternative)"]];
+const VM_CHECKS = [
+  ["Tu dis bonjour et tu te présentes (prénom + nom)", t => /bonjour/i.test(t) && /(je m.?appelle|je suis|c.?est|ici)\s+\p{Lu}/u.test(t)],
+  ["Tu donnes le motif : un stage / une PFMP", t => /(stage|pfmp|p\.f\.m\.p|p[ée]riode de formation)/i.test(t)],
+  ["Tu laisses ton numéro de téléphone", t => /0\s?[1-9](?:[\s.\-]?\d{2}){4}/.test(t) || /z[ée]ro\s+(six|sept)/i.test(t)],
+  ["Tu dis quand tu rappelles (jour ou moment)", t => /(rappel|repasser|recontact|repasserai)/i.test(t) && /(lundi|mardi|mercredi|jeudi|vendredi|samedi|demain|matin|apr[eè]s-midi|semaine|\d{1,2}\s?h)/i.test(t)],
+  ["Tu termines poliment (merci, bonne journée…)", t => /(merci|bonne journ[ée]e|au revoir|bonne fin)/i.test(t)]
+];
+const VM_MODEL = "Bonjour Monsieur Garnier, je m’appelle Yanis Benali, élève de première commerce et vente au lycée Jean Moulin. Je vous appelle au sujet d’un stage de quatre semaines, du 17 novembre au 12 décembre. Vous pouvez me joindre au 06 12 34 56 78 — je répète : 06 12 34 56 78. Sinon, je vous rappelle jeudi matin. Merci et bonne journée !";
+const vmScore = () => VM_CHECKS.filter(([, f]) => f(S.mis.vm || "")).length;
+const DEM_RES = ["Pas encore contactée","Pas de réponse / répondeur","Refus","À rappeler","Rendez-vous obtenu","Stage accepté"];
+const demFilled = () => S.mis.dem.filter(d => (d.ent || "").trim()).length;
 const MSTEPS = [
  {k:"methode", n:1, titre:"Découvrir les 8 techniques d’écoute", min:10, star:false,
   why:"Avant de t’entraîner, tu dois connaître les « outils » d’un bon vendeur au téléphone : questionner, reformuler, montrer qu’on comprend, résumer.",
@@ -1111,13 +1131,14 @@ const MSTEPS = [
   btns: `<button class="btn primary" data-mgo="visite:notes">📝 Prendre des notes</button>`},
  {k:"objections", n:4, titre:"Appel 3 : la responsable hésite… à toi de répondre", min:25, star:true,
   why:"Une entreprise peut dire « non » ou « pas le temps ». Écouter ses craintes, les reformuler et proposer une solution peut tout changer. Ici, c’est TOI qui joues l’élève.",
-  how:["Clique sur <b>🎭 À toi de répondre</b> puis <b>▶ Lancer</b>.","Quand c’est ton tour, écris ta réponse dans le cadre (1 ou 2 phrases), puis clique sur <b>Comparer avec le modèle</b>.","Compare honnêtement : as-tu montré que tu comprenais ? as-tu posé une question ? as-tu proposé deux créneaux ?"],
-  done: () => !!logOf("objections").role, res: () => { const t = logOf("objections").role; return t ? `${t.replies.filter(r => r.mine).length} réponses écrites sur ${t.replies.length}` : ""; },
+  how:["Clique sur <b>🎭 À toi de répondre</b> puis <b>▶ Lancer</b>.","Quand c’est ton tour, <b>dis d’abord ta réponse à voix haute</b> (comme au téléphone), puis écris-la dans le cadre (1 ou 2 phrases) et clique sur <b>Comparer avec le modèle</b>.","De retour ici, relis tes réponses et coche honnêtement ce que tu as réussi (auto-évaluation)."],
+  done: () => !!logOf("objections").role, res: () => { const t = logOf("objections").role; return t ? `${t.replies.filter(r => r.mine).length} réponses écrites sur ${t.replies.length} · auto-évaluation : ${AUTO.filter(([k]) => S.mis.auto[k]).length} / ${AUTO.length}` : ""; },
   btns: `<button class="btn primary" data-mgo="objections:role">🎭 À toi de répondre</button>`},
- {k:"relance", n:5, titre:"Bonus : relancer après avoir déposé son CV", min:10, star:false,
-  why:"Déposer un CV ne suffit pas : il faut rappeler. Sarah transforme un « mais » en rendez-vous.",
-  how:["Choisis l’exercice que tu veux : repérer les techniques, prendre des notes ou répondre à la place de Sarah.","Fais-le jusqu’au bout pour qu’il soit enregistré."],
-  done: () => { const t = logOf("relance"); return !!(t.tech || t.notes || t.role); }, res: () => { const t = logOf("relance"); return [t.tech && `techniques ${t.tech.ok}/${t.tech.n}`, t.notes && `notes ${t.notes.nOk}/${t.notes.n}`, t.role && `jeu de rôle fait`].filter(Boolean).join(" · "); },
+ {k:"relance", n:5, titre:"Bonus : relancer après avoir déposé son CV", min:15, star:false,
+  titre2:"Bonus : relancer, et laisser un message sur répondeur",
+  why:"Déposer un CV ne suffit pas : il faut rappeler. Et très souvent, tu tomberas sur un répondeur : ton message doit donner envie de te rappeler.",
+  how:["<b>Relance</b> : choisis l’exercice que tu veux sur l’appel de Sarah (techniques, notes ou à toi de répondre) et fais-le jusqu’au bout.","<b>Répondeur</b> : écris ci-dessous le message que tu laisserais (environ 20 secondes). L’appli coche les 5 points d’un bon message. Ensuite, lis-le à voix haute en te chronométrant."],
+  done: () => { const t = logOf("relance"); return !!(t.tech || t.notes || t.role) || vmScore() >= 4; }, res: () => { const t = logOf("relance"); return [t.tech && `techniques ${t.tech.ok}/${t.tech.n}`, t.notes && `notes ${t.notes.nOk}/${t.notes.n}`, t.role && `jeu de rôle fait`, (S.mis.vm || "").trim() && `répondeur ${vmScore()}/${VM_CHECKS.length}`].filter(Boolean).join(" · "); },
   btns: `<button class="btn" data-mgo="relance:tech">🔍 Techniques</button><button class="btn" data-mgo="relance:notes">📝 Notes</button><button class="btn" data-mgo="relance:role">🎭 À toi</button>`},
  {k:"script", n:6, titre:"Écrire MON script de recherche de stage", min:25, star:false,
   why:"Tu prépares ton vrai appel (ou ta vraie visite) dans une entreprise que tu veux contacter. Le jour J, tu sauras quoi dire et quoi noter.",
@@ -1126,8 +1147,8 @@ const MSTEPS = [
   btns: `<button class="btn primary" data-mscript="new">✍️ Ouvrir l’éditeur avec le modèle</button><button class="btn" data-mscript="edit">Modifier mon script enregistré</button>`},
  {k:"bilan", n:7, titre:"Bilan et envoi à ton professeur", min:10, star:true,
   why:"Ton professeur verra ton travail, même si tu n’as pas tout fini : envoie ce que tu as fait.",
-  how:["Réponds aux 4 questions ci-dessous (elles s’enregistrent toutes seules).","Clique sur <b>📧 Ouvrir ma messagerie</b> : le message est prêt, avec tous tes résultats. Vérifie-le, puis appuie sur <b>Envoyer</b>.","Si ta messagerie ne s’ouvre pas : <b>⬇️ Télécharger mon travail</b> et joins le fichier à un e-mail, ou utilise <b>Copier-coller en 3 étapes</b>."],
-  done: () => REFLEX.every(([k]) => (S.mis.r[k] || "").trim().length >= 10), res: () => `${REFLEX.filter(([k]) => (S.mis.r[k] || "").trim().length >= 10).length} / ${REFLEX.length} réponses`},
+  how:["Réponds aux 3 questions ci-dessous (elles s’enregistrent toutes seules).","Remplis <b>Mes démarches PFMP</b> : au moins une entreprise que tu as contactée ou que tu vas contacter. Tu pourras compléter ce tableau après la séance et le renvoyer.","Clique sur <b>📧 Ouvrir ma messagerie</b> : le message est prêt, avec tous tes résultats. Vérifie-le, puis appuie sur <b>Envoyer</b>.","Si ta messagerie ne s’ouvre pas : <b>⬇️ Télécharger mon travail</b> et joins le fichier à un e-mail, ou utilise <b>Copier-coller en 3 étapes</b>."],
+  done: () => REFLEX.every(([k]) => (S.mis.r[k] || "").trim().length >= 10) && demFilled() >= 1, res: () => `${REFLEX.filter(([k]) => (S.mis.r[k] || "").trim().length >= 10).length} / ${REFLEX.length} réponses · ${demFilled()} entreprise(s) dans mes démarches`},
 ];
 function missionText(){
   const L = [`MISSION PFMP — Studio Écoute active`, `Élève : ${S.ident.nom || "(nom non renseigné)"}${S.ident.classe ? " · " + S.ident.classe : ""} · envoyé le ${fdate(Date.now())}`, `Étapes faites : ${MSTEPS.filter(s => s.done()).length} / ${MSTEPS.length}`, ""];
@@ -1137,10 +1158,14 @@ function missionText(){
   const role = (t, titre) => { if (!t) return; L.push(`   ${titre} — jeu de rôle :`); t.replies.forEach((r, k) => { L.push(`     ${k + 1}. Moi : ${r.mine || "(rien écrit)"}`); L.push(`        Modèle${r.tech ? " (" + r.tech + ")" : ""} : ${r.model}`); }); };
   L.push("2. APPEL — Décrocher un stage par téléphone"); const a = logOf("appel"); if (!a.tech) L.push("   pas fait"); tech(a.tech, "Repérer la technique"); L.push("");
   L.push("3. VISITE — Se présenter en agence"); const v = logOf("visite"); if (!v.notes) L.push("   pas fait"); notes(v.notes, "Prise de notes"); L.push("");
-  L.push("4. APPEL — La responsable hésite"); const o = logOf("objections"); if (!o.role) L.push("   pas fait"); role(o.role, "À toi de répondre"); L.push("");
-  L.push("5. BONUS — Relancer après le CV"); const r = logOf("relance"); if (!r.tech && !r.notes && !r.role) L.push("   pas fait"); tech(r.tech, "Techniques"); notes(r.notes, "Notes"); role(r.role, "À toi de répondre"); L.push("");
+  L.push("4. APPEL — La responsable hésite"); const o = logOf("objections"); if (!o.role) L.push("   pas fait"); role(o.role, "À toi de répondre");
+  if (o.role) { L.push("   Mon auto-évaluation :"); AUTO.forEach(([k, l]) => L.push(`     ${S.mis.auto[k] ? "☑" : "☐"} ${l}`)); } L.push("");
+  L.push("5. BONUS — Relancer après le CV"); const r = logOf("relance"); if (!r.tech && !r.notes && !r.role) L.push("   pas fait"); tech(r.tech, "Techniques"); notes(r.notes, "Notes"); role(r.role, "À toi de répondre");
+  if ((S.mis.vm || "").trim()) { L.push(`   Mon message de répondeur (${vmScore()}/${VM_CHECKS.length} points) :`, `     « ${S.mis.vm.trim()} »`); VM_CHECKS.forEach(([l, f]) => L.push(`     ${f(S.mis.vm) ? "✓" : "✗"} ${l}`)); } L.push("");
   const ms = myScript(); L.push("6. MON SCRIPT DE RECHERCHE DE STAGE"); if (!ms) L.push("   pas fait"); else { scriptChecks(ms).forEach(([l, ok]) => L.push(`   ${ok ? "✓" : "✗"} ${l}`)); L.push("   --- mon script ---", ...ms.split(/\r?\n/).map(x => "   " + x)); } L.push("");
   L.push("7. BILAN"); REFLEX.forEach(([k, q]) => { L.push(`   ${q}`); L.push(`   → ${(S.mis.r[k] || "").trim() || "(pas de réponse)"}`); });
+  L.push("", "MES DÉMARCHES PFMP"); const D = S.mis.dem.filter(d => (d.ent || "").trim()); if (!D.length) L.push("   aucune entreprise indiquée");
+  D.forEach((d, i) => L.push(`   ${i + 1}. ${d.ent.trim()} · ${d.date ? d.date.split("-").reverse().join("/") : "date ?"} · contact : ${d.who || "—"} · ${d.res || DEM_RES[0]} · prochaine action : ${d.next || "—"}`));
   return L.join("\n");
 }
 function drawMission(){
@@ -1158,24 +1183,39 @@ function drawMission(){
    </div>
    <div class="m-prog"><b>${nDone} / ${MSTEPS.length} étapes faites</b><span class="m-bar"><i style="width:${Math.round(nDone / MSTEPS.length * 100)}%"></i></span></div>
    ${MSTEPS.map(s => { const ok = s.done(); const r = s.res(); return `<article class="m-step ${ok ? "ok" : ""}" id="ms-${s.k}">
-     <div class="m-head"><span class="m-n">${ok ? "✓" : s.n}</span><div><h2 class="h2" style="font-size:1.12rem">${s.star ? "★ " : ""}${esc(s.titre)}</h2><span class="muted" style="font-size:.85rem">≈ ${s.min} min${s.star ? " · indispensable (version 1 h)" : ""}</span></div><span class="m-badge">${ok ? "Fait" : "À faire"}</span></div>
+     <div class="m-head"><span class="m-n">${ok ? "✓" : s.n}</span><div><h2 class="h2" style="font-size:1.12rem">${s.star ? "★ " : ""}${esc(s.titre2 || s.titre)}</h2><span class="muted" style="font-size:.85rem">≈ ${s.min} min${s.star ? " · indispensable (version 1 h)" : ""}</span></div><span class="m-badge">${ok ? "Fait" : "À faire"}</span></div>
      <p class="m-why"><b>Pourquoi :</b> ${esc(s.why)}</p>
      <ol class="m-how">${s.how.map(h => `<li>${h}</li>`).join("")}</ol>
+     ${s.k === "objections" && ok ? `<details class="m-replies"><summary>Relire mes réponses et les modèles</summary>${logOf("objections").role.replies.map(r => `<p><b>Moi :</b> ${esc(r.mine || "(rien écrit)")}<br><span class="muted"><b>Modèle${r.tech ? " · " + esc(r.tech) : ""} :</b> ${esc(r.model)}</span></p>`).join("")}</details>
+       <div class="m-auto"><b>Mon auto-évaluation</b>${AUTO.map(([k, l]) => `<label><input type="checkbox" data-auto="${k}" ${S.mis.auto[k] ? "checked" : ""}> ${esc(l)}</label>`).join("")}</div>` : ""}
+     ${s.k === "relance" ? `<div class="m-vm"><label for="m-vm"><b>📞 Mon message de répondeur</b> <span class="muted">(pour l’entreprise que tu veux appeler)</span></label><textarea id="m-vm" data-vm rows="4" placeholder="Bonjour Madame…, je m’appelle…">${esc(S.mis.vm || "")}</textarea>
+       <ul class="found" id="m-vm-checks">${vmChecksHtml()}</ul><div class="row"><button class="btn sm ghost" data-vmmodel>Voir un exemple de message</button></div><p class="explain" id="m-vm-model" hidden>« ${esc(VM_MODEL)} »<br><span class="muted">Parle lentement, et dis ton numéro deux fois, chiffre par chiffre.</span></p></div>` : ""}
      ${s.k === "script" ? `<ul class="found">${scriptChecks(myScript()).map(([l, c]) => `<li class="${c ? "on" : myScript() ? "off" : ""}">${esc(l)}</li>`).join("")}</ul>` : ""}
-     ${s.k === "bilan" ? `<div class="m-reflex">${REFLEX.map(([k, q]) => `<label>${esc(q)}<textarea data-rx="${k}" rows="3">${esc(S.mis.r[k] || "")}</textarea></label>`).join("")}</div><div class="row"><button class="btn" data-mdl>⬇️ Télécharger mon travail</button><button class="btn ghost" data-mprev>👁 Voir ce qui sera envoyé</button></div><pre class="m-prev" hidden></pre><div id="m-mail"></div>` : ""}
+     ${s.k === "bilan" ? `<div class="m-reflex">${REFLEX.map(([k, q]) => `<label>${esc(q)}<textarea data-rx="${k}" rows="3">${esc(S.mis.r[k] || "")}</textarea></label>`).join("")}</div>
+     <div class="m-dem"><b>📋 Mes démarches PFMP</b> <span class="muted">— les entreprises que tu as contactées ou que tu vas contacter</span>
+      ${S.mis.dem.map((d, i) => `<div class="m-demrow"><label><b>Entreprise ${i + 1}</b><input data-dem="${i}:ent" value="${esc(d.ent || "")}" placeholder="Nom, ville"></label><label>Date<input type="date" data-dem="${i}:date" value="${esc(d.date || "")}"></label><label>Personne jointe<input data-dem="${i}:who" value="${esc(d.who || "")}" placeholder="Nom, fonction"></label><label>Résultat<select data-dem="${i}:res">${DEM_RES.map(o => `<option ${d.res === o ? "selected" : ""}>${o}</option>`).join("")}</select></label><label>Prochaine action<input data-dem="${i}:next" value="${esc(d.next || "")}" placeholder="ex. rappeler mardi 14 h"></label></div>`).join("")}
+      <button class="btn sm ghost" data-demadd style="justify-self:start">+ Ajouter une entreprise</button></div><div class="row"><button class="btn" data-mdl>⬇️ Télécharger mon travail</button><button class="btn ghost" data-mprev>👁 Voir ce qui sera envoyé</button></div><pre class="m-prev" hidden></pre><div id="m-mail"></div>` : ""}
      ${r ? `<p class="m-res">${esc(r)}</p>` : ""}
      ${s.btns ? `<div class="row">${s.btns}</div>` : ""}</article>`; }).join("")}`;
   MAIL.mount($("#m-mail"), {app:"Studio Écoute", work:"Mission PFMP", get score(){ return `${MSTEPS.filter(s => s.done()).length}/${MSTEPS.length} étapes`; }, getBody: missionText, ident: S.ident, saveIdent: () => save(), noIdent: true, maxBody: 7000});
 }
 $("#mission-root").addEventListener("input", e => { const t = e.target;
   if (t.dataset.mid) { S.ident[t.dataset.mid] = t.value.slice(0, 60); save(); }
-  if (t.dataset.rx) { S.mis.r[t.dataset.rx] = t.value.slice(0, 1500); save(); } });
+  if (t.dataset.rx) { S.mis.r[t.dataset.rx] = t.value.slice(0, 1500); save(); }
+  if (t.dataset.vm !== undefined) { S.mis.vm = t.value.slice(0, 1200); save(); $("#m-vm-checks").innerHTML = vmChecksHtml(); }
+  if (t.dataset.dem) { const [i, f] = t.dataset.dem.split(":"); S.mis.dem[+i][f] = t.value.slice(0, 120); save(); } });
+$("#mission-root").addEventListener("change", e => { const t = e.target;
+  if (t.dataset.auto) { S.mis.auto[t.dataset.auto] = t.checked; save(); }
+  if (t.dataset.dem) { const [i, f] = t.dataset.dem.split(":"); S.mis.dem[+i][f] = t.value; save(); } });
+function vmChecksHtml(){ const t = S.mis.vm || ""; return VM_CHECKS.map(([l, f]) => `<li class="${f(t) ? "on" : t.trim() ? "off" : ""}">${esc(l)}</li>`).join(""); }
 $("#mission-root").addEventListener("click", e => {
   const g = e.target.closest("[data-mgo]"); if (g) { const [k, m] = g.dataset.mgo.split(":"); openPlayer(PFMP[k], m, true); return; }
   const sc = e.target.closest("[data-mscript]"); if (sc) { if (sc.dataset.mscript === "new") { if (S.draft && /niveau\s*:\s*pfmp/i.test(S.draft) && S.draft !== MODEL_PFMP) { $("#ed").value = S.draft; } else { S.draft = MODEL_PFMP; S.editing = null; $("#ed").value = MODEL_PFMP; } }
     else { const own = [...S.mine].sort((a, b) => (b.date || 0) - (a.date || 0))[0]; if (!own) { toast("Tu n’as pas encore enregistré de script"); return; } S.draft = own.text; S.editing = own.id; $("#ed").value = own.text; }
     save(); location.hash = "creer"; drawPreview(); return; }
   if (e.target.closest("[data-mdl]")) { downloadText(missionText(), `mission-pfmp-${(S.ident.nom || "eleve").toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/g, "-")}.txt`); return; }
+  if (e.target.closest("[data-vmmodel]")) { const m = $("#m-vm-model"); m.hidden = !m.hidden; return; }
+  if (e.target.closest("[data-demadd]")) { if (S.mis.dem.length >= 8) return toast("8 entreprises maximum"); S.mis.dem.push({}); save(); drawMission(); document.querySelector(".m-dem")?.scrollIntoView({block:"center"}); return; }
   if (e.target.closest("[data-mprev]")) { const pre = $(".m-prev"); pre.hidden = !pre.hidden; pre.textContent = missionText(); }
 });
 let DLC = null; (async () => { try { DLC = await window.claude?.use?.("downloads"); } catch (e) { DLC = null; } })();
