@@ -313,6 +313,26 @@ mark.info{background:linear-gradient(transparent 10%,var(--hl) 10%,var(--hl) 90%
 .recap .r{border-top:1px solid var(--rule);padding-top:8px;display:grid;gap:3px;font-size:.93rem}
 @media (max-width:860px){ .player,.editor{grid-template-columns:minmax(0,1fr)} .line{max-width:96%} }
 @media (max-width:640px){ #dys-btn,#read-btn{order:1;padding:4px 9px;font-size:.8rem} nav.tabs{order:2} }
+.m-banner{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-decoration:none;color:var(--ink);background:var(--blue-soft);border:2px solid var(--blue);border-radius:14px;padding:12px 16px}
+.m-banner>span:first-child{font-size:1.8rem}.m-banner small{color:var(--ink-2)}
+.m-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:14px}
+.m-ul{margin:0;padding-left:1.1em;display:grid;gap:5px;font-size:.95rem}
+.m-id{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(160px,100%),1fr));gap:8px}
+.m-id label,.m-reflex label{display:grid;gap:4px;font-size:.9rem;color:var(--ink-2)}
+.m-id input,.m-reflex textarea{width:100%;box-sizing:border-box;border:1px solid var(--rule-strong);border-radius:8px;padding:8px 10px;background:var(--paper);color:var(--ink);font-size:16px;font-family:var(--f-body)}
+.m-prog{display:grid;gap:6px}.m-bar{height:10px;border-radius:99px;background:var(--rule);overflow:hidden}.m-bar i{display:block;height:100%;background:var(--blue)}
+.m-step{background:var(--card);border:1.5px solid var(--rule-strong);border-radius:16px;padding:16px;display:grid;gap:10px}
+.m-step.ok{border-color:var(--ok)}
+.m-head{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.m-n{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:var(--paper);font-weight:800;font-family:var(--f-display)}
+.m-step.ok .m-n{background:var(--ok)}
+.m-badge{font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--rule);color:var(--ink-2)}.m-step.ok .m-badge{background:var(--ok-soft);color:var(--ok)}
+.m-why{margin:0;font-size:.94rem}.m-how{margin:0;padding-left:1.3em;display:grid;gap:5px;font-size:.95rem}
+.m-how code{font-family:var(--f-mono);font-size:.82rem;background:var(--paper);padding:1px 5px;border-radius:4px}
+.m-res{margin:0;font-weight:700;color:var(--ok)}
+.m-reflex{display:grid;gap:10px}
+.m-prev{white-space:pre-wrap;font-family:var(--f-mono);font-size:.78rem;background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:10px;max-height:340px;overflow:auto;margin:0}
+@media (max-width:440px){nav.tabs{gap:0}nav.tabs a{padding:6px 6px;font-size:.78rem}.m-banner{grid-template-columns:auto 1fr}.m-banner>b{grid-column:1/-1}}
 .a11y-bar{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:35;display:flex;gap:6px}
 .a11y-bar[hidden]{display:none!important}
 .a11y-bar button{font:inherit;font-weight:700;font-size:.9rem;border:0;border-radius:999px;padding:10px 16px;background:var(--ink,#18264a);color:var(--paper,#fff);box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer}
@@ -322,15 +342,26 @@ mark.info{background:linear-gradient(transparent 10%,var(--hl) 10%,var(--hl) 90%
 .a11y-reading{outline:3px solid var(--hl,#f6df4c)!important;outline-offset:2px;border-radius:6px;background-color:color-mix(in srgb,var(--hl,#f6df4c) 22%,transparent)}
 @media print{.a11y-bar,.a11y-relire,.a11y-ico{display:none!important}}
 
+.mailbox{border:1.5px solid var(--blue,#2846c4);border-radius:12px;padding:12px 14px;display:grid;gap:8px;margin-top:10px;background:var(--card,#fff);color:var(--ink,#18264a);text-align:left}
+.mailbox h3{margin:0;font-size:1.05rem}
+.mail-id{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:8px}
+.mail-id label{display:grid;gap:3px;font-size:.84rem}
+.mail-id input{width:100%;box-sizing:border-box;min-width:0;border:1px solid var(--rule-strong,#b7c2d9);border-radius:8px;padding:7px 10px;font-size:16px;background:var(--paper,#fff);color:inherit}
+.mailbox .mail-open{justify-self:start;text-decoration:none}
+.mail-help,.mail-b small{font-size:.82rem;opacity:.85}
+.mail-b summary{cursor:pointer;font-size:.86rem}
+.mail-b .row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+
 </style>
 
 <header class="top">
   <div class="wrap">
     <div class="brand"><b>Studio <span>Écoute</span></b><small>2de et 1re Bac Pro · Métiers du commerce et de la vente</small></div>
     <nav class="tabs" aria-label="Sections">
+      <a href="#mission" data-tab="mission">🎯 Mission</a>
       <a href="#biblio" data-tab="biblio">Scripts</a>
       <a href="#lecteur" data-tab="lecteur">S’entraîner</a>
-      <a href="#creer" data-tab="creer">Créer / importer</a>
+      <a href="#creer" data-tab="creer">Créer</a>
       <a href="#methode" data-tab="methode">Méthode</a>
     </nav>
     <button class="btn sm" id="dys-btn" aria-pressed="false">Aa Confort de lecture</button><button class="btn sm" id="read-btn" aria-pressed="false" title="Touche un texte pour l’entendre">🔈 Lecture</button>
@@ -338,9 +369,11 @@ mark.info{background:linear-gradient(transparent 10%,var(--hl) 10%,var(--hl) 90%
 </header>
 
 <main class="wrap">
+<section data-view="mission" hidden><div id="mission-root" style="display:grid;gap:16px"></div></section>
 <section data-view="biblio">
   <div style="display:grid;gap:8px"><p class="eyebrow">Écoute active</p><h1 class="h1">Écoute, note, <span class="hl">reformule</span>.</h1>
   <p class="lede">Choisis un script d’appel ou d’entretien. Tu peux l’écouter, prendre des notes comme un vrai vendeur, repérer les techniques d’écoute, puis répondre toi-même à la place du vendeur.</p></div>
+  <a class="m-banner" href="#mission"><span>🎯</span><span><b>Travail à distance : Mission PFMP</b><br><small>Trouver son stage par téléphone ou en face à face · 1 h à 2 h · à envoyer à ton professeur</small></span><b>Commencer →</b></a>
   <div class="row"><div class="chips" id="lib-filter"></div><a class="btn sm" href="#creer">📥 Coller un script reçu</a></div>
   <div class="lib-grid" id="lib"></div>
 </section>
@@ -522,6 +555,110 @@ const TECHS = [
  ["Silence / acquiescement","On laisse parler le client, avec de petits signes d’écoute.","« Hum hum… je vous écoute. »"]
 ];
 
+/* Scripts « Recherche de PFMP » (mission à distance) */
+const PFMP = {
+appel:`Titre : Décrocher un stage par téléphone
+Niveau : PFMP
+Contexte : Yanis, élève de 1re Métiers du commerce et de la vente, appelle l’agence immobilière Horizon Immo pour trouver sa PFMP. Il doit passer l’accueil, joindre la bonne personne et obtenir un rendez-vous.
+Assistante : Horizon Immo, bonjour, Léa à l’appareil.
+Élève [Question ouverte] : Bonjour Madame, Yanis Benali, élève de première commerce et vente au lycée Jean Moulin. Je cherche un stage en prospection. Qui s’occupe des stagiaires dans votre agence, s’il vous plaît ?
+Assistante : C’est {responsable:Monsieur Garnier, le directeur de l’agence}. Mais il est en rendez-vous.
+Élève [Question alternative] : D’accord. Vaut-il mieux le rappeler en fin de matinée ou en début d’après-midi ?
+Assistante : Rappelez {rappel:vers quatorze heures}, il sera au bureau.
+Élève [Synthèse] : Très bien, je rappelle Monsieur Garnier à quatorze heures. Merci beaucoup, bonne journée.
+Responsable : Garnier, j’écoute.
+Élève : Bonjour Monsieur Garnier, Yanis Benali, du lycée Jean Moulin. Votre assistante m’a conseillé de vous rappeler à quatorze heures. Je cherche une période de formation en entreprise. Avez-vous deux minutes ?
+Responsable : Allez-y, rapidement.
+Élève [Question ouverte] : Dans mon bac pro, on apprend à prospecter et à conseiller les clients. Comment se passe la prospection dans votre agence ?
+Responsable : On fait {missions:du phoning auprès des propriétaires et du boîtage dans le quartier}. C’est quand, votre stage ?
+Élève : Du {dates:dix-sept novembre au douze décembre}, pendant quatre semaines.
+Responsable : Hum… on a beaucoup de travail en décembre. Vous êtes à l’aise au téléphone ?
+Élève [Reformulation] : Si je comprends bien, vous avez besoin de quelqu’un d’efficace au téléphone pendant une période chargée. Justement, je m’entraîne à la prospection téléphonique en classe, et j’aime ce contact.
+Responsable : Bon. Venez me voir avec {documents:votre CV et la convention de stage}.
+Élève [Question alternative] : Avec plaisir. Je peux passer jeudi à dix-sept heures ou samedi matin. Qu’est-ce qui vous arrange ?
+Responsable : {rdv:Jeudi, dix-sept heures}, à l’agence.
+Élève [Synthèse] : Parfait. Je récapitule : jeudi à dix-sept heures, avec mon CV et la convention de stage. Merci Monsieur Garnier, à jeudi !
+? À quelle heure Yanis doit-il rappeler le directeur ? = 14 | quatorze
+? Quels documents doit-il apporter ? = CV | convention
+? Quel jour a lieu le rendez-vous ? = jeudi`,
+
+visite:`Titre : Se présenter en agence pour un stage
+Niveau : PFMP
+Contexte : Inès se rend en personne à l’agence d’intérim Proxi Intérim pour proposer sa candidature. La responsable est absente : Inès doit noter toutes les informations utiles pour revenir au bon moment.
+Accueil : Bonjour Mademoiselle, je peux vous aider ?
+Élève : Bonjour Madame. Je m’appelle Inès Diallo, je suis en première commerce et vente. Je cherche un stage de quatre semaines en prospection. Pourrais-je rencontrer la personne qui s’occupe des stagiaires ?
+Accueil : C’est {responsable:Madame Roussel, la responsable d’agence}, mais elle est {absence:chez un client toute la journée}.
+Élève [Empathie] : Je comprends, je tombe au mauvais moment.
+Élève [Question ouverte] : Quel serait le meilleur moment pour la rencontrer ?
+Accueil : Elle est là {présence:le mardi et le vendredi matin, à partir de neuf heures}.
+Élève [Question fermée] : Est-ce que je peux vous laisser mon CV pour elle ?
+Accueil : Bien sûr. Et prenez {contact:sa carte de visite}, son adresse e-mail est dessus.
+Élève [Relance] : Sa carte de visite… merci. Je peux lui dire que je viens de votre part ?
+Accueil : Oui, dites-lui que vous avez vu {prénom:Sonia}, à l’accueil.
+Élève [Question ouverte] : Merci Sonia. Quelles missions confiez-vous aux stagiaires ?
+Accueil : Ils {missions:appellent les entreprises de la zone pour présenter nos services} et préparent les dossiers des intérimaires.
+Élève [Synthèse] : Très bien. Je récapitule : je reviens mardi à neuf heures pour rencontrer Madame Roussel, de la part de Sonia, et je lui envoie aussi mon CV par e-mail. Merci beaucoup, bonne journée !
+? Comment s’appelle la responsable d’agence ? = Roussel
+? Quels jours la responsable est-elle présente ? = mardi | vendredi
+? De la part de qui Inès doit-elle se présenter ? = Sonia`,
+
+objections:`Titre : La responsable hésite à prendre un stagiaire
+Niveau : PFMP
+Contexte : Lucas appelle le cabinet Horizon Assurances. La responsable n’est pas sûre de vouloir un stagiaire : Lucas doit écouter ses craintes, montrer qu’il a compris et la rassurer.
+Élève : Bonjour Madame Lopez, Lucas Martin, élève de première commerce au lycée Jean Moulin. Je vous appelle pour une période de formation en entreprise de quatre semaines. Avez-vous un instant ?
+Responsable : Oui… mais je vous préviens, {crainte:l’an dernier, notre stagiaire n’était pas motivé du tout}.
+Élève [Empathie] : Je comprends, ça a dû être décevant pour vous et pour votre équipe.
+Élève [Question ouverte] : Qu’attendez-vous d’un stagiaire pour que le stage se passe bien ?
+Responsable : Qu’il soit {attentes:ponctuel, poli avec les clients}, et qu’il ose décrocher le téléphone.
+Élève [Reformulation] : Si je vous comprends bien, vous voulez quelqu’un de ponctuel, de poli, et qui n’a pas peur du téléphone.
+Responsable : Exactement. Mais franchement, {objection:je n’ai pas beaucoup de temps pour encadrer quelqu’un}.
+Élève [Relance] : Pas beaucoup de temps… c’est surtout à certaines périodes ?
+Responsable : Surtout {période:en fin de mois}, avec les renouvellements de contrats.
+Élève [Question fermée] : Est-ce que rappeler vos clients pour fixer leurs rendez-vous de bilan pourrait vous faire gagner du temps ?
+Responsable : Ah oui, ça, ça nous aiderait vraiment.
+Élève [Question alternative] : Je peux venir me présenter avec mon CV lundi à dix-sept heures ou mercredi après-midi. Que préférez-vous ?
+Responsable : {rdv:Mercredi, quinze heures}.
+Élève [Synthèse] : C’est noté : mercredi à quinze heures au cabinet, avec mon CV. Merci Madame Lopez, à mercredi !
+? Qu’est-ce qui s’est mal passé avec l’ancien stagiaire ? = motive | motivation
+? Quelle tâche pourrait faire gagner du temps au cabinet ? = rappeler | rendez-vous | bilan
+? À quelle heure est le rendez-vous ? = 15 | quinze`,
+
+relance:`Titre : Relancer après avoir déposé son CV
+Niveau : PFMP
+Contexte : Une semaine après avoir déposé son CV au Garage Dupuis, Sarah rappelle pour savoir où en est sa demande de stage. Le chef des ventes a un doute : elle doit le comprendre et rebondir.
+Standard : Garage Dupuis, bonjour.
+Élève : Bonjour Monsieur, Sarah Koné, élève en commerce. J’ai déposé mon CV {dépôt:mardi dernier} pour un stage. Pourriez-vous me passer le chef des ventes, s’il vous plaît ?
+Standard : C’est {chef:Monsieur Brun}. Je vous le passe.
+M. Brun : Brun, bonjour.
+Élève : Bonjour Monsieur Brun, Sarah Koné. J’ai déposé mon CV mardi dernier pour un stage de quatre semaines. L’avez-vous reçu ?
+M. Brun : Oui, il est sur mon bureau. Mais {objection:je cherche plutôt quelqu’un qui a le permis}.
+Élève [Reformulation] : Si je comprends bien, le permis serait utile pour certaines missions, comme déplacer les véhicules.
+M. Brun : Voilà, c’est ça.
+Élève [Question ouverte] : Quelles autres missions confiez-vous aux stagiaires, au showroom ?
+M. Brun : {missions:L’accueil des clients, les relances téléphoniques des devis} et la préparation des journées portes ouvertes.
+Élève [Question alternative] : Ce sont justement des tâches que j’apprends en cours. Puis-je venir vous rencontrer vendredi à dix-sept heures ou samedi matin ?
+M. Brun : {rdv:Samedi à dix heures}. Demandez-moi à l’accueil.
+Élève [Synthèse] : Merci Monsieur Brun. Samedi à dix heures, je vous demande à l’accueil. Bonne journée !
+? Comment s’appelle le chef des ventes ? = Brun
+? Quelles missions sont confiées aux stagiaires ? = accueil | relance | portes ouvertes
+? Quand a lieu le rendez-vous ? = samedi`
+};
+const MODEL_PFMP = `Titre : Ma recherche de stage chez …
+Niveau : PFMP
+Contexte : J’appelle (ou je me présente à) l’entreprise … pour trouver ma PFMP.
+Accueil : … bonjour, que puis-je pour vous ?
+Élève : Bonjour Madame, je m’appelle …, élève de première commerce et vente au lycée … Je cherche un stage de quatre semaines. Qui s’occupe des stagiaires, s’il vous plaît ?
+Accueil : C’est {responsable:Madame …}. Elle est {dispo:là le … à partir de … heures}.
+Élève [Question alternative] : …
+Responsable : …
+Élève [Question ouverte] : …
+Responsable : …
+Élève [Reformulation] : Si je comprends bien, …
+Responsable : …
+Élève [Synthèse] : Je récapitule : …
+? Quel est le nom de la personne à contacter ? = …
+? Quand faut-il rappeler ou revenir ? = …`;
+
 </script>
 <script>
 /* ================= Utilitaires ================= */
@@ -535,7 +672,7 @@ function toast(m){ const t = $("#toast"); t.textContent = m; t.hidden = false; c
 function hashStr(s){ let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36); }
 const KEY = "studioEcoute.v1";
 let S = {}; try { S = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { S = {}; }
-S.mine ??= []; S.res ??= {}; S.voice ??= {c:{v:"", rate:1, pitch:1}, v:{v:"", rate:1, pitch:1}}; S.speed ??= 1; S.dys ??= false; S.draft ??= "";
+S.ident ??= {nom:"", classe:""}; S.mine ??= []; S.res ??= {}; S.voice ??= {c:{v:"", rate:1, pitch:1}, v:{v:"", rate:1, pitch:1}}; S.speed ??= 1; S.dys ??= false; S.draft ??= "";
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
 /* ================= Lecture d'un script ================= */
@@ -581,14 +718,14 @@ function speak(text, side){
 }
 
 /* ================= Navigation ================= */
-const VIEWS = ["biblio","lecteur","creer","methode"];
+const VIEWS = ["mission","biblio","lecteur","creer","methode"];
 function route(){
   let h = (location.hash || "#biblio").slice(1); if (!VIEWS.includes(h)) h = "biblio";
   if (h === "lecteur" && !P) h = "biblio";
   $$("section[data-view]").forEach(s => s.hidden = s.dataset.view !== h);
   $$("nav.tabs a").forEach(a => a.dataset.tab === h ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current"));
   if (h !== "lecteur") stopAll();
-  if (h === "biblio") drawLib(); if (h === "creer") drawPreview();
+  if (h === "biblio") drawLib(); if (h === "creer") drawPreview(); if (h === "mission") drawMission(); if (h === "methode" && !S.mis.seen.methode) { S.mis.seen.methode = Date.now(); save(); }
   window.scrollTo({top:0});
 }
 window.addEventListener("hashchange", route);
@@ -706,14 +843,54 @@ const A11Y = (() => {
   };
 })();
 
+/* ===================== Envoi au professeur par e-mail (la messagerie de l’élève s’ouvre, message prêt) ===================== */
+const MAIL = (() => {
+  const TO = "r.nguon75@gmail.com";
+  const MAXBODY = 1800;
+  const e = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  async function copy(t, ok){ try { await navigator.clipboard.writeText(t); (window.toast || (() => {}))(ok); return true; }
+    catch (err) { const ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+      let r = false; try { r = document.execCommand("copy"); } catch (x) {} ta.remove(); (window.toast || (() => {}))(r ? ok : "Copie impossible : sélectionne le texte à la main"); return r; } }
+  const subjectOf = o => `[${o.app}] ${o.ident.nom || "Élève"}${o.ident.classe ? " – " + o.ident.classe : ""} – ${o.work}${o.score ? " – " + o.score : ""}`;
+  function bodyOf(o){
+    const full = `Bonjour,\n\nVoici mon travail : ${o.work}${o.score ? " (" + o.score + ")" : ""}.\n\n${o.getBody()}\n\n${o.ident.nom || ""}${o.ident.classe ? " – " + o.ident.classe : ""}`;
+    const max = o.maxBody || MAXBODY; if (full.length <= max) return {short: full, full};
+    return {short: full.slice(0, max) + "\n\n[… message raccourci : je joins ou je colle ma copie complète.]", full};
+  }
+  const href = o => { const b = bodyOf(o).short; return `mailto:${TO}?subject=${encodeURIComponent(subjectOf(o))}&body=${encodeURIComponent(b)}`; };
+  /* o = {app, work, score, getBody(), ident:{nom,classe}, saveIdent(ident)} */
+  function mount(container, o){
+    if (!container) return; const box = document.createElement("div"); box.className = "mailbox";
+    box.innerHTML = `<h3>📧 Envoyer à mon professeur</h3>
+     ${o.noIdent ? "" : `<div class="mail-id"><label>Prénom et nom<input data-mid="nom" value="${e(o.ident.nom)}" autocomplete="name"></label><label>Classe<input data-mid="classe" value="${e(o.ident.classe)}" placeholder="ex. Tle MCV B"></label></div>`}
+     <a class="btn primary mail-open" href="#" target="_blank" rel="noopener">📧 Ouvrir ma messagerie</a>
+     <small class="mail-help">Ta messagerie s’ouvre avec le message prêt (adresse, objet, résultats). Vérifie-le puis appuie sur <b>Envoyer</b>.</small>
+     <details class="mail-b"><summary>Ça ne s’ouvre pas ? Copier-coller en 3 étapes</summary>
+      <div class="row"><button type="button" class="btn sm" data-mc="to">1. Copier l’adresse</button><button type="button" class="btn sm" data-mc="subj">2. Copier l’objet</button><button type="button" class="btn sm" data-mc="body">3. Copier le texte</button></div>
+      <small>Ouvre ta messagerie (Gmail, Yahoo, Outlook, l’ENT…), écris un nouveau message et colle les trois éléments.</small></details>`;
+    container.appendChild(box);
+    const a = box.querySelector(".mail-open"); const upd = () => { a.href = href(o); };
+    upd();
+    box.addEventListener("input", ev => { const k = ev.target.dataset.mid; if (!k) return; o.ident[k] = ev.target.value.slice(0, 60); o.saveIdent?.(o.ident); upd(); });
+    container.addEventListener("input", () => setTimeout(upd, 0)); container.addEventListener("toggle", upd, true); a.addEventListener("focus", upd); a.addEventListener("pointerdown", upd);
+    a.addEventListener("click", ev => { upd(); if (!o.ident.nom?.trim()) { ev.preventDefault(); (window.toast || alert)("Écris d’abord ton prénom et ton nom"); (box.querySelector('[data-mid="nom"]') || document.querySelector('[data-id="nom"]'))?.focus(); } });
+    box.addEventListener("click", ev => { const b = ev.target.closest("[data-mc]"); if (!b) return;
+      if (b.dataset.mc === "to") copy(TO, "Adresse du professeur copiée");
+      if (b.dataset.mc === "subj") copy(subjectOf(o), "Objet copié");
+      if (b.dataset.mc === "body") copy(bodyOf(o).full, "Texte copié"); });
+    return box;
+  }
+  return {TO, mount, subjectOf};
+})();
+
 A11Y.init({get: () => ({read: !!S.read, rate: S.speed || 1}), mainSel: "main", readSel: ".techs > div,.line,.syntax pre"});
 if (!A11Y.TTS) $("#read-btn").hidden = true;
 
 /* ================= Bibliothèque ================= */
 let FILTER = "Tous";
-function allScripts(){ return [...LIBRARY.map(t => ({text:t, own:false})), ...S.mine.map(m => ({text:m.text, own:true, id:m.id}))]; }
+function allScripts(){ return [...[...Object.values(PFMP), ...LIBRARY].map(t => ({text:t, own:false})), ...S.mine.map(m => ({text:m.text, own:true, id:m.id}))]; }
 function drawLib(){
-  const levels = ["Tous","2de","1re A","1re B","Mes scripts"];
+  const levels = ["Tous","PFMP","2de","1re A","1re B","Mes scripts"];
   $("#lib-filter").innerHTML = levels.map(l => `<button class="chip" data-f="${l}" aria-pressed="${l===FILTER}">${l}</button>`).join("");
   const list = allScripts().map(x => ({...x, p:parse(x.text)})).filter(x => FILTER === "Tous" || (FILTER === "Mes scripts" ? x.own : x.p.niveau === FILTER));
   $("#lib").innerHTML = list.map((x, i) => { const r = S.res[x.p.id] || {}; const techN = x.p.lines.filter(l => l.tech).length;
@@ -763,11 +940,11 @@ function drawPreview(){
 /* ================= Lecteur ================= */
 let P = null;
 const MODES = {ecoute:"🎧 Écouter", notes:"📝 Prendre des notes", tech:"🔍 Repérer la technique", role:"🎭 À toi de répondre"};
-function openPlayer(text){ stopAll(); const p = parse(text); P = {p, text, mode:"ecoute", idx:-1, playing:false, showText:true, answers:{}, techScore:{ok:0, n:0}, replies:[], listens:0, done:false}; location.hash = "lecteur"; drawPlayer(); }
-function setMode(m){ stopAll(); Object.assign(P, {mode:m, idx:-1, playing:false, showText: m === "ecoute" || m === "tech", answers:{}, techScore:{ok:0, n:0}, replies:[], listens:0, done:false, revealed:{}, techAnswered:{}, compared:false, notesText:""}); drawPlayer(); }
+function openPlayer(text, mode, mission){ stopAll(); const p = parse(text); P = {p, text, mode:"ecoute", idx:-1, playing:false, showText:true, answers:{}, techScore:{ok:0, n:0}, techLog:[], replies:[], listens:0, done:false, mission: !!mission}; location.hash = "lecteur"; if (mode && mode !== "ecoute") setMode(mode); else drawPlayer(); }
+function setMode(m){ stopAll(); Object.assign(P, {mode:m, idx:-1, playing:false, showText: m === "ecoute" || m === "tech", answers:{}, techScore:{ok:0, n:0}, techLog:[], replies:[], listens:0, done:false, revealed:{}, techAnswered:{}, compared:false, notesText:""}); drawPlayer(); }
 function drawPlayer(){
   const p = P.p; const hasTech = p.lines.some(l => l.tech) && p.lines.some(l => l.side === "v" && l.tech);
-  $("#player-root").innerHTML = `<div class="row"><a class="btn ghost sm" href="#biblio">← Tous les scripts</a></div>
+  $("#player-root").innerHTML = `<div class="row">${P.mission ? `<a class="btn sm primary" href="#mission">← Retour à ma mission PFMP</a>` : ""}<a class="btn ghost sm" href="#biblio">← Tous les scripts</a></div>
    <div style="display:grid;gap:6px"><div class="tags">${p.niveau ? `<span class="tag">${esc(p.niveau)}</span>` : ""}</div><h1 class="h1" style="font-size:clamp(1.5rem,4vw,2.1rem)">${esc(p.titre)}</h1>${p.contexte ? `<p class="lede">${esc(p.contexte)}</p>` : ""}</div>
    <div class="modes">${Object.entries(MODES).map(([k,v]) => `<button class="chip" data-mode="${k}" aria-pressed="${P.mode===k}" ${k==="tech" && !hasTech ? "disabled title=\"Aucune technique étiquetée dans ce script\"" : ""}>${v}</button>`).join("")}</div>
    <p class="tip" id="mode-help">${({ecoute:"Écoute le dialogue en entier. Touche une réplique pour la réentendre. Les informations importantes sont surlignées à la fin.",
@@ -831,7 +1008,7 @@ function askTech(i){
   const l = P.p.lines[i]; const names = TECHS.map(t => t[0]); const pool = shuffle(names.filter(n => n !== l.tech)).slice(0, 3); const opts = shuffle([l.tech, ...pool]);
   $("#ask").innerHTML = `<div class="ask"><b>Quelle technique le vendeur vient-il d’utiliser ?</b><div class="opts">${opts.map(o => `<button class="btn" data-t="${esc(o)}">${esc(o)}</button>`).join("")}</div><div id="ask-fb"></div></div>`;
   $("#ask").querySelector(".ask").scrollIntoView({block:"nearest", behavior:"smooth"});
-  $("#ask").onclick = e => { const b = e.target.closest("[data-t]"); if (!b || P.techAnswered?.[i]) return; P.techAnswered ??= {}; P.techAnswered[i] = true; const ok = b.dataset.t === l.tech; P.techScore.n++; if (ok) P.techScore.ok++;
+  $("#ask").onclick = e => { const b = e.target.closest("[data-t]"); if (!b || P.techAnswered?.[i]) return; P.techAnswered ??= {}; P.techAnswered[i] = true; const ok = b.dataset.t === l.tech; P.techScore.n++; if (ok) P.techScore.ok++; P.techLog.push({line: l.text, given: b.dataset.t, good: l.tech, ok});
     $$("#ask [data-t]").forEach(x => { if (x.dataset.t === l.tech) x.classList.add("primary"); else if (x === b) x.classList.add("red"); x.disabled = true; });
     const def = TECHS.find(t => t[0] === l.tech); $("#ask-fb").innerHTML = `<p class="feedback ${ok ? "ok" : "ko"}">${ok ? "✓ Bien vu !" : `✕ C’était : ${esc(l.tech)}`}</p>${def ? `<p class="explain">${esc(def[1])} Exemple : ${esc(def[2])}</p>` : ""}<button class="btn primary" id="ask-next">Continuer ▶</button>`;
     drawTranscript(); drawTechScore(); $("#ask-next").onclick = () => { $("#ask").innerHTML = ""; run(); }; $("#ask-next").focus({preventScroll:true}); };
@@ -852,13 +1029,18 @@ function askReply(i){
 function finish(){
   drawTranscript(); const p = P.p; const box = $("#after"); if (!box) return;
   if (P.mode === "ecoute") { box.innerHTML = `<div class="bilan"><p class="eyebrow">Écoute terminée</p><h2 class="h2">${p.infos.length} informations clés à retenir</h2><p class="muted">Elles sont surlignées dans le dialogue. Essaie maintenant « Prendre des notes » sans regarder le texte.</p><div class="row"><button class="btn primary" data-go="notes">📝 Prendre des notes</button>${p.lines.some(l => l.tech) ? `<button class="btn" data-go="tech">🔍 Repérer la technique</button>` : ""}</div></div>`; }
-  if (P.mode === "tech") { const pc = P.techScore.n ? Math.round(P.techScore.ok / P.techScore.n * 100) : 0; S.res[p.id] = {...S.res[p.id], tech: Math.max(pc, S.res[p.id]?.tech || 0)}; save();
+  if (P.mode === "tech") { const pc = P.techScore.n ? Math.round(P.techScore.ok / P.techScore.n * 100) : 0; S.res[p.id] = {...S.res[p.id], tech: Math.max(pc, S.res[p.id]?.tech || 0)}; S.log[p.id] = {...S.log[p.id], tech:{ok: P.techScore.ok, n: P.techScore.n, list: P.techLog, date: Date.now()}}; save();
     box.innerHTML = `<div class="bilan"><p class="eyebrow">Techniques repérées</p><h2 class="h2">${P.techScore.ok} / ${P.techScore.n} — <span class="mono">${pc} %</span></h2><p class="muted">Toutes les techniques sont maintenant affichées dans le dialogue. Relis celles que tu as confondues.</p><div class="row"><button class="btn primary" data-go="role">🎭 À toi de répondre</button><button class="btn" data-go="tech">Rejouer</button></div></div>`; }
-  if (P.mode === "role") { box.innerHTML = `<div class="bilan"><p class="eyebrow">Jeu de rôle terminé</p><h2 class="h2">Tes réponses et les modèles</h2><div class="recap">${P.replies.map(r => `<div class="r"><span><b>Toi :</b> ${r.mine ? esc(r.mine) : "<i>(réponse à l’oral)</i>"}</span><span class="muted"><b>Modèle${r.tech ? " · " + esc(r.tech) : ""} :</b> ${esc(r.model)}</span></div>`).join("")}</div><div class="row"><button class="btn" id="copy-replies">Copier mes réponses</button><button class="btn primary" data-go="role">Rejouer</button></div></div>`;
+  if (P.mode === "role") { S.log[p.id] = {...S.log[p.id], role:{replies: P.replies, date: Date.now()}}; save(); box.innerHTML = `<div class="bilan"><p class="eyebrow">Jeu de rôle terminé</p><h2 class="h2">Tes réponses et les modèles</h2><div class="recap">${P.replies.map(r => `<div class="r"><span><b>Toi :</b> ${r.mine ? esc(r.mine) : "<i>(réponse à l’oral)</i>"}</span><span class="muted"><b>Modèle${r.tech ? " · " + esc(r.tech) : ""} :</b> ${esc(r.model)}</span></div>`).join("")}</div><div class="row"><button class="btn" id="copy-replies">Copier mes réponses</button><button class="btn primary" data-go="role">Rejouer</button></div></div>`;
     $("#copy-replies").onclick = () => { const t = `${p.titre}\n` + P.replies.map((r, k) => `${k+1}. Moi : ${r.mine || "(oral)"}\n   Modèle : ${r.model}`).join("\n"); try { navigator.clipboard.writeText(t).then(() => toast("Réponses copiées"), () => toast("Copie impossible ici")); } catch (e) { toast("Copie impossible ici"); } }; }
   if (P.mode === "notes" && !P.compared) { box.innerHTML = `<div class="tip">Dialogue terminé. Complète tes notes, puis clique sur « J’ai fini : comparer ».</div>`; }
+  if (P.mode === "tech") ecMail(box, `${P.techScore.ok}/${P.techScore.n}`, () => `Exercice : repérer les techniques d’écoute\nScore : ${P.techScore.ok} / ${P.techScore.n}`);
+  if (P.mode === "role") ecMail(box, "", () => "Exercice : jeu de rôle\n\n" + P.replies.map((r, k) => `${k+1}. Moi : ${r.mine || "(oral)"}\n   Modèle : ${r.model}`).join("\n"));
+  if (P.mission && P.mode !== "ecoute" && P.mode !== "notes") box.insertAdjacentHTML("beforeend", `<a class="btn primary" href="#mission" style="justify-self:start;margin-top:10px">✓ Étape enregistrée : retour à ma mission PFMP →</a>`);
   box.onclick = e => { const b = e.target.closest("[data-go]"); if (b) setMode(b.dataset.go); };
 }
+function ecMail(box, score, body){ const d = document.createElement("details"); d.className = "panel"; d.style.marginTop = "10px"; d.innerHTML = `<summary><b>📧 Envoyer à mon professeur</b></summary>`; box.appendChild(d);
+  MAIL.mount(d, {app:"Studio Écoute", work: P.p.titre, score, getBody: body, ident:S.ident, saveIdent:() => save()}); }
 function infoFound(info, notes){
   const STOP = /^(les|des|sur|une|par|pour|dans|avec|aux|du|de|la|le|un|et|en|au|ses|son|sa|mes|mon|ma|est|qui|que|pas|plus|tres|vers|chez|par)$/;
   const n = " " + norm(notes) + " "; const words = norm(info.v).split(" ").filter(w => (w.length > 2 || /\d/.test(w)) && !STOP.test(w));
@@ -879,13 +1061,130 @@ function compareNotes(){
    ${p.qs.length ? `<h3 class="h2" style="font-size:1.05rem;margin-top:8px">Questions de compréhension</h3>${p.qs.map((q, k) => `<div class="qrow"><label for="q${k}">${esc(q.q)}</label><input id="q${k}" autocomplete="off"></div>`).join("")}<div class="row"><button class="btn primary" id="q-check">Vérifier mes réponses</button></div><div id="q-res"></div>` : ""}
    <p class="muted" style="font-size:.88rem">Les informations sont surlignées dans le dialogue. Écoutes supplémentaires utilisées : ${Math.max(0, P.listens - p.lines.length)}.</p><div class="row"><button class="btn" data-go="notes">Recommencer</button>${p.lines.some(l => l.tech) ? `<button class="btn" data-go="tech">🔍 Repérer la technique</button>` : ""}</div></div>`;
   const saveScore = qOk => { const tot = p.infos.length + p.qs.length; const pc = tot ? Math.round((nOk + (qOk || 0)) / tot * 100) : 0; S.res[p.id] = {...S.res[p.id], notes: Math.max(pc, S.res[p.id]?.notes || 0)}; save(); return pc; };
-  saveScore(0);
+  saveScore(0); S.log[p.id] = {...S.log[p.id], notes:{nOk, n: p.infos.length, res: res.map(r => ({k: r.i.k, v: r.i.v, ok: r.ok})), notes, q: null, qn: p.qs.length, date: Date.now()}}; save();
   if ($("#q-check")) $("#q-check").onclick = () => { let ok = 0; p.qs.forEach((q, k) => { const inp = $("#q" + k); const good = answerOk(inp.value, q.ans); inp.classList.toggle("ok", good); inp.classList.toggle("ko", !good); if (good) ok++; });
     const pc = saveScore(ok); $("#q-res").innerHTML = `<p class="feedback ${ok === p.qs.length ? "ok" : "ko"}">${ok} / ${p.qs.length} bonnes réponses · score total ${pc} %</p>${p.qs.map(q => `<p class="muted" style="font-size:.88rem">${esc(q.q)} → <b>${esc(q.ans[0] || "")}</b></p>`).join("")}`; };
+  let qDone = null; const qBtn = $("#q-check"); if (qBtn) qBtn.addEventListener("click", () => { qDone = p.qs.filter((q, k) => answerOk($("#q" + k).value, q.ans)).length;
+    const L = S.log[p.id].notes; L.q = qDone; L.qa = p.qs.map((q, k) => ({q: q.q, given: $("#q" + k).value.trim(), good: q.ans[0] || "", ok: answerOk($("#q" + k).value, q.ans)})); save(); });
+  ecMail($("#after .bilan") || $("#after"), `${nOk}/${p.infos.length} infos`, () => `Exercice : prise de notes\nInformations clés notées : ${nOk} / ${p.infos.length}\n` + res.map(r => `${r.ok ? "✓" : "✗"} ${r.i.k} : ${r.i.v}`).join("\n") + (qDone != null ? `\nQuestions de compréhension : ${qDone} / ${p.qs.length}` : "") + `\n\nMes notes :\n${notes}`);
+  if (P.mission) $("#after .bilan").insertAdjacentHTML("beforeend", `<a class="btn primary" href="#mission" style="justify-self:start">✓ Étape enregistrée : retour à ma mission PFMP →</a>`);
   $("#after").onclick = e => { const b = e.target.closest("[data-go]"); if (b) setMode(b.dataset.go); };
 }
 
 $("#techs").innerHTML = TECHS.map(t => `<div><b>${esc(t[0])}</b><span>${esc(t[1])}</span><i>${esc(t[2])}</i></div>`).join("");
+/* ================= Mission PFMP (travail à distance) ================= */
+S.log ??= {}; S.mis ??= {r:{}, seen:{}};
+const PID = Object.fromEntries(Object.entries(PFMP).map(([k, t]) => [k, parse(t).id]));
+const logOf = k => S.log[PID[k]] || {};
+const fdate = d => d ? new Date(d).toLocaleDateString("fr-FR") + " " + new Date(d).toLocaleTimeString("fr-FR", {hour:"2-digit", minute:"2-digit"}) : "";
+function myScript(){
+  const own = [...S.mine].sort((a, b) => (b.date || 0) - (a.date || 0)).find(m => /niveau\s*:\s*pfmp/i.test(m.text)) || [...S.mine].sort((a, b) => (b.date || 0) - (a.date || 0))[0];
+  return own ? own.text : "";
+}
+function scriptChecks(t){
+  const p = parse(t || ""); const filled = t && !/…/.test(t);
+  return [["Au moins 8 répliques", p.lines.length >= 8], ["Au moins 3 techniques d’écoute étiquetées [ ]", p.lines.filter(l => l.tech && l.side === "v").length >= 3],
+    ["Au moins 3 informations à noter { : }", p.infos.length >= 3], ["Au moins 2 questions de compréhension ?", p.qs.filter(q => q.ans.length).length >= 2],
+    ["Tous les « … » du modèle sont remplacés", !!filled]];
+}
+const REFLEX = [
+  ["presente", "Écris la phrase que tu diras pour te présenter au téléphone à une entreprise (2 ou 3 phrases)."],
+  ["infos", "Quelles informations dois-tu absolument noter quand tu appelles ou quand tu passes dans une entreprise ? (au moins 4)"],
+  ["technique", "Quelle technique d’écoute t’a semblé la plus utile pour trouver un stage ? Pourquoi ?"],
+  ["entreprises", "Cite 2 entreprises près de chez toi que tu vas contacter pour ta PFMP (nom + téléphone ou visite)."]
+];
+const MSTEPS = [
+ {k:"methode", n:1, titre:"Découvrir les 8 techniques d’écoute", min:10, star:false,
+  why:"Avant de t’entraîner, tu dois connaître les « outils » d’un bon vendeur au téléphone : questionner, reformuler, montrer qu’on comprend, résumer.",
+  how:["Ouvre l’onglet <b>Méthode</b>.","Lis les 8 cartes. Avec le bouton <b>🔈 Lecture</b>, tu peux toucher une carte pour l’entendre.","Retiens surtout : <b>question ouverte</b>, <b>question alternative</b>, <b>reformulation</b> et <b>synthèse</b>."],
+  done: () => !!S.mis.seen.methode, res: () => S.mis.seen.methode ? "Méthode consultée" : "",
+  btns: `<a class="btn primary" href="#methode">📖 Ouvrir la Méthode</a>`},
+ {k:"appel", n:2, titre:"Appel 1 : décrocher un stage par téléphone", min:20, star:true,
+  why:"Au téléphone, on tombe d’abord sur l’accueil. Tu vas voir comment Yanis obtient le nom du bon interlocuteur, puis un rendez-vous, sans jamais forcer.",
+  how:["Clique sur <b>🎧 1. Écouter</b> puis <b>▶ Lancer</b> : écoute tout l’appel en suivant le texte.","Clique ensuite sur <b>🔍 2. Repérer la technique</b> : après chaque réplique de Yanis, choisis la technique qu’il vient d’utiliser.","Lis l’explication quand tu te trompes. Ton score est enregistré tout seul."],
+  done: () => !!logOf("appel").tech, res: () => { const t = logOf("appel").tech; return t ? `Techniques repérées : ${t.ok} / ${t.n}` : ""; },
+  btns: `<button class="btn" data-mgo="appel:ecoute">🎧 1. Écouter</button><button class="btn primary" data-mgo="appel:tech">🔍 2. Repérer la technique</button>`},
+ {k:"visite", n:3, titre:"Visite 2 : se présenter en agence", min:20, star:true,
+  why:"Quand tu passes dans une entreprise, le responsable est souvent absent. Celui qui repart avec un nom, un jour et un contact a déjà fait la moitié du chemin.",
+  how:["Clique sur <b>📝 Prendre des notes</b>. Le texte est caché, comme dans la vraie vie.","Appuie sur <b>▶ Lancer</b> et note les informations dans le cadre <b>Mes notes</b> : des mots-clés, pas des phrases (nom, jours, heure, contact…).","À la fin, clique sur <b>J’ai fini : comparer</b>, puis réponds aux 3 questions et clique sur <b>Vérifier mes réponses</b>."],
+  done: () => !!logOf("visite").notes, res: () => { const t = logOf("visite").notes; return t ? `Informations notées : ${t.nOk} / ${t.n}${t.q != null ? ` · questions : ${t.q} / ${t.qn}` : ""}` : ""; },
+  btns: `<button class="btn primary" data-mgo="visite:notes">📝 Prendre des notes</button>`},
+ {k:"objections", n:4, titre:"Appel 3 : la responsable hésite… à toi de répondre", min:25, star:true,
+  why:"Une entreprise peut dire « non » ou « pas le temps ». Écouter ses craintes, les reformuler et proposer une solution peut tout changer. Ici, c’est TOI qui joues l’élève.",
+  how:["Clique sur <b>🎭 À toi de répondre</b> puis <b>▶ Lancer</b>.","Quand c’est ton tour, écris ta réponse dans le cadre (1 ou 2 phrases), puis clique sur <b>Comparer avec le modèle</b>.","Compare honnêtement : as-tu montré que tu comprenais ? as-tu posé une question ? as-tu proposé deux créneaux ?"],
+  done: () => !!logOf("objections").role, res: () => { const t = logOf("objections").role; return t ? `${t.replies.filter(r => r.mine).length} réponses écrites sur ${t.replies.length}` : ""; },
+  btns: `<button class="btn primary" data-mgo="objections:role">🎭 À toi de répondre</button>`},
+ {k:"relance", n:5, titre:"Bonus : relancer après avoir déposé son CV", min:10, star:false,
+  why:"Déposer un CV ne suffit pas : il faut rappeler. Sarah transforme un « mais » en rendez-vous.",
+  how:["Choisis l’exercice que tu veux : repérer les techniques, prendre des notes ou répondre à la place de Sarah.","Fais-le jusqu’au bout pour qu’il soit enregistré."],
+  done: () => { const t = logOf("relance"); return !!(t.tech || t.notes || t.role); }, res: () => { const t = logOf("relance"); return [t.tech && `techniques ${t.tech.ok}/${t.tech.n}`, t.notes && `notes ${t.notes.nOk}/${t.notes.n}`, t.role && `jeu de rôle fait`].filter(Boolean).join(" · "); },
+  btns: `<button class="btn" data-mgo="relance:tech">🔍 Techniques</button><button class="btn" data-mgo="relance:notes">📝 Notes</button><button class="btn" data-mgo="relance:role">🎭 À toi</button>`},
+ {k:"script", n:6, titre:"Écrire MON script de recherche de stage", min:25, star:false,
+  why:"Tu prépares ton vrai appel (ou ta vraie visite) dans une entreprise que tu veux contacter. Le jour J, tu sauras quoi dire et quoi noter.",
+  how:["Clique sur <b>✍️ Ouvrir l’éditeur avec le modèle</b>.","Remplace tous les « … » par ta situation : le nom de l’entreprise, ton nom, tes dates de stage. Garde le principe : <b>une réplique par ligne</b>, qui commence par le nom de la personne puis « : ».","Ajoute la technique entre crochets après « Élève » : <code>Élève [Reformulation] : …</code>. Mets les infos à noter entre accolades : <code>{rdv:jeudi dix-sept heures}</code>.","Regarde le cadre <b>Ce que l’appli a compris</b>, puis clique sur <b>Enregistrer dans mes scripts</b>. Teste-le avec <b>▶ S’entraîner sur ce script</b>."],
+  done: () => scriptChecks(myScript()).every(c => c[1]), res: () => { const c = scriptChecks(myScript()); return myScript() ? `${c.filter(x => x[1]).length} / ${c.length} critères respectés` : ""; },
+  btns: `<button class="btn primary" data-mscript="new">✍️ Ouvrir l’éditeur avec le modèle</button><button class="btn" data-mscript="edit">Modifier mon script enregistré</button>`},
+ {k:"bilan", n:7, titre:"Bilan et envoi à ton professeur", min:10, star:true,
+  why:"Ton professeur verra ton travail, même si tu n’as pas tout fini : envoie ce que tu as fait.",
+  how:["Réponds aux 4 questions ci-dessous (elles s’enregistrent toutes seules).","Clique sur <b>📧 Ouvrir ma messagerie</b> : le message est prêt, avec tous tes résultats. Vérifie-le, puis appuie sur <b>Envoyer</b>.","Si ta messagerie ne s’ouvre pas : <b>⬇️ Télécharger mon travail</b> et joins le fichier à un e-mail, ou utilise <b>Copier-coller en 3 étapes</b>."],
+  done: () => REFLEX.every(([k]) => (S.mis.r[k] || "").trim().length >= 10), res: () => `${REFLEX.filter(([k]) => (S.mis.r[k] || "").trim().length >= 10).length} / ${REFLEX.length} réponses`},
+];
+function missionText(){
+  const L = [`MISSION PFMP — Studio Écoute active`, `Élève : ${S.ident.nom || "(nom non renseigné)"}${S.ident.classe ? " · " + S.ident.classe : ""} · envoyé le ${fdate(Date.now())}`, `Étapes faites : ${MSTEPS.filter(s => s.done()).length} / ${MSTEPS.length}`, ""];
+  L.push(`1. MÉTHODE : ${S.mis.seen.methode ? "consultée" : "non consultée"}`, "");
+  const tech = (t, titre) => { if (!t) return; L.push(`   ${titre} — techniques repérées : ${t.ok} / ${t.n}`); (t.list || []).forEach(x => L.push(`     ${x.ok ? "✓" : "✗"} « ${x.line.length > 70 ? x.line.slice(0, 70) + "…" : x.line} » → ma réponse : ${x.given}${x.ok ? "" : " (bonne réponse : " + x.good + ")"}`)); };
+  const notes = (t, titre) => { if (!t) return; L.push(`   ${titre} — informations notées : ${t.nOk} / ${t.n}${t.q != null ? ` · questions : ${t.q} / ${t.qn}` : ""}`); (t.res || []).forEach(r => L.push(`     ${r.ok ? "✓" : "✗"} ${r.k} : ${r.v}`)); (t.qa || []).forEach(q => L.push(`     ? ${q.q} → ${q.given || "—"} ${q.ok ? "✓" : "✗ (" + q.good + ")"}`)); L.push(`     Mes notes : ${(t.notes || "").replace(/\n+/g, " / ") || "—"}`); };
+  const role = (t, titre) => { if (!t) return; L.push(`   ${titre} — jeu de rôle :`); t.replies.forEach((r, k) => { L.push(`     ${k + 1}. Moi : ${r.mine || "(rien écrit)"}`); L.push(`        Modèle${r.tech ? " (" + r.tech + ")" : ""} : ${r.model}`); }); };
+  L.push("2. APPEL — Décrocher un stage par téléphone"); const a = logOf("appel"); if (!a.tech) L.push("   pas fait"); tech(a.tech, "Repérer la technique"); L.push("");
+  L.push("3. VISITE — Se présenter en agence"); const v = logOf("visite"); if (!v.notes) L.push("   pas fait"); notes(v.notes, "Prise de notes"); L.push("");
+  L.push("4. APPEL — La responsable hésite"); const o = logOf("objections"); if (!o.role) L.push("   pas fait"); role(o.role, "À toi de répondre"); L.push("");
+  L.push("5. BONUS — Relancer après le CV"); const r = logOf("relance"); if (!r.tech && !r.notes && !r.role) L.push("   pas fait"); tech(r.tech, "Techniques"); notes(r.notes, "Notes"); role(r.role, "À toi de répondre"); L.push("");
+  const ms = myScript(); L.push("6. MON SCRIPT DE RECHERCHE DE STAGE"); if (!ms) L.push("   pas fait"); else { scriptChecks(ms).forEach(([l, ok]) => L.push(`   ${ok ? "✓" : "✗"} ${l}`)); L.push("   --- mon script ---", ...ms.split(/\r?\n/).map(x => "   " + x)); } L.push("");
+  L.push("7. BILAN"); REFLEX.forEach(([k, q]) => { L.push(`   ${q}`); L.push(`   → ${(S.mis.r[k] || "").trim() || "(pas de réponse)"}`); });
+  return L.join("\n");
+}
+function drawMission(){
+  const root = $("#mission-root"); const nDone = MSTEPS.filter(s => s.done()).length;
+  root.innerHTML = `<div style="display:grid;gap:8px"><p class="eyebrow">Travail à distance · 1re MCV</p><h1 class="h1">Mission PFMP : <span class="hl">écouter</span> pour décrocher son stage</h1>
+    <p class="lede">Tu vas t’entraîner sur 4 situations de recherche de stage (au téléphone et en face à face), puis préparer ton propre appel. À la fin, tu envoies ton travail à ton professeur.</p></div>
+   <div class="m-grid">
+    <div class="panel" style="display:grid;gap:8px"><h2 class="h2" style="font-size:1.15rem">🎯 Pourquoi cet exercice ?</h2>
+     <ul class="m-ul"><li>Pour trouver une PFMP, tu vas appeler ou te présenter dans des entreprises. Le plus souvent, tu tomberas sur l’accueil ou sur quelqu’un de pressé.</li>
+     <li><b>Écouter activement</b>, c’est ce qui fait la différence : noter le bon nom et le bon moment, reformuler, montrer qu’on a compris, proposer deux créneaux.</li>
+     <li>Ce sont aussi les compétences de ton bac (prospection et relation client) : tu les utiliseras pendant tout ton stage.</li></ul></div>
+    <div class="panel" style="display:grid;gap:8px"><h2 class="h2" style="font-size:1.15rem">✅ Avant de commencer</h2>
+     <div class="m-id"><label>Prénom et nom<input data-mid="nom" value="${esc(S.ident.nom)}" autocomplete="name"></label><label>Classe<input data-mid="classe" value="${esc(S.ident.classe)}" placeholder="ex. 1re MCV B"></label></div>
+     <ul class="m-ul"><li>🎧 Mets des écouteurs : les dialogues sont lus à voix haute (sinon, lis le texte).</li><li>⏱ <b>Version complète : environ 2 h</b> (étapes 1 à 7). <b>Version courte : 1 h</b> → les étapes marquées ★ (2, 3, 4 et 7).</li><li>💾 Ton travail s’enregistre tout seul sur cet appareil : tu peux t’arrêter et revenir plus tard, sur le même téléphone ou le même ordinateur.</li></ul></div>
+   </div>
+   <div class="m-prog"><b>${nDone} / ${MSTEPS.length} étapes faites</b><span class="m-bar"><i style="width:${Math.round(nDone / MSTEPS.length * 100)}%"></i></span></div>
+   ${MSTEPS.map(s => { const ok = s.done(); const r = s.res(); return `<article class="m-step ${ok ? "ok" : ""}" id="ms-${s.k}">
+     <div class="m-head"><span class="m-n">${ok ? "✓" : s.n}</span><div><h2 class="h2" style="font-size:1.12rem">${s.star ? "★ " : ""}${esc(s.titre)}</h2><span class="muted" style="font-size:.85rem">≈ ${s.min} min${s.star ? " · indispensable (version 1 h)" : ""}</span></div><span class="m-badge">${ok ? "Fait" : "À faire"}</span></div>
+     <p class="m-why"><b>Pourquoi :</b> ${esc(s.why)}</p>
+     <ol class="m-how">${s.how.map(h => `<li>${h}</li>`).join("")}</ol>
+     ${s.k === "script" ? `<ul class="found">${scriptChecks(myScript()).map(([l, c]) => `<li class="${c ? "on" : myScript() ? "off" : ""}">${esc(l)}</li>`).join("")}</ul>` : ""}
+     ${s.k === "bilan" ? `<div class="m-reflex">${REFLEX.map(([k, q]) => `<label>${esc(q)}<textarea data-rx="${k}" rows="3">${esc(S.mis.r[k] || "")}</textarea></label>`).join("")}</div><div class="row"><button class="btn" data-mdl>⬇️ Télécharger mon travail</button><button class="btn ghost" data-mprev>👁 Voir ce qui sera envoyé</button></div><pre class="m-prev" hidden></pre><div id="m-mail"></div>` : ""}
+     ${r ? `<p class="m-res">${esc(r)}</p>` : ""}
+     ${s.btns ? `<div class="row">${s.btns}</div>` : ""}</article>`; }).join("")}`;
+  MAIL.mount($("#m-mail"), {app:"Studio Écoute", work:"Mission PFMP", get score(){ return `${MSTEPS.filter(s => s.done()).length}/${MSTEPS.length} étapes`; }, getBody: missionText, ident: S.ident, saveIdent: () => save(), noIdent: true, maxBody: 7000});
+}
+$("#mission-root").addEventListener("input", e => { const t = e.target;
+  if (t.dataset.mid) { S.ident[t.dataset.mid] = t.value.slice(0, 60); save(); }
+  if (t.dataset.rx) { S.mis.r[t.dataset.rx] = t.value.slice(0, 1500); save(); } });
+$("#mission-root").addEventListener("click", e => {
+  const g = e.target.closest("[data-mgo]"); if (g) { const [k, m] = g.dataset.mgo.split(":"); openPlayer(PFMP[k], m, true); return; }
+  const sc = e.target.closest("[data-mscript]"); if (sc) { if (sc.dataset.mscript === "new") { if (S.draft && /niveau\s*:\s*pfmp/i.test(S.draft) && S.draft !== MODEL_PFMP) { $("#ed").value = S.draft; } else { S.draft = MODEL_PFMP; S.editing = null; $("#ed").value = MODEL_PFMP; } }
+    else { const own = [...S.mine].sort((a, b) => (b.date || 0) - (a.date || 0))[0]; if (!own) { toast("Tu n’as pas encore enregistré de script"); return; } S.draft = own.text; S.editing = own.id; $("#ed").value = own.text; }
+    save(); location.hash = "creer"; drawPreview(); return; }
+  if (e.target.closest("[data-mdl]")) { downloadText(missionText(), `mission-pfmp-${(S.ident.nom || "eleve").toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/g, "-")}.txt`); return; }
+  if (e.target.closest("[data-mprev]")) { const pre = $(".m-prev"); pre.hidden = !pre.hidden; pre.textContent = missionText(); }
+});
+let DLC = null; (async () => { try { DLC = await window.claude?.use?.("downloads"); } catch (e) { DLC = null; } })();
+async function downloadText(text, filename){
+  const blob = new Blob(["﻿" + text], {type:"text/plain;charset=utf-8"});
+  if (DLC) { try { await DLC.save({filename, data: blob}); toast("Fichier enregistré"); return; } catch (err) { if (err?.code === "declined") return; } }
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = filename; document.body.appendChild(a); a.click(); a.remove(); toast("Fichier téléchargé");
+}
+
 applyDys(); route();
 
 </script>
